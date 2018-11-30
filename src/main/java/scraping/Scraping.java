@@ -15,6 +15,7 @@ public class Scraping {
         Unirest.setDefaultHeader(USER_AGENT,USER_AGENT_VALUE);
         HttpResponse<String> response=Unirest.get(startingURL).asString();
         str.append(response.getBody());
+
     }
     public String getBody(){
         return str.toString();

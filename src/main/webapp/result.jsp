@@ -1,6 +1,14 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: steven
+  Date: 2018-11-30
+  Time: 08:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>CS355 Term Project</title>
+    <title></title>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -8,16 +16,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <div class="center">
-        <div class="center">
-            <h1><span id="tiny">Tiny </span> &nbsp;<span id="search">Search</span></h1>
-            <small class="form-text text-muted">--CS355 Term Project</small>
-        </div>
-        <form action="search" class="search-form center">
-            <input type="text" id="keywords" class="form-control row" >
-        </form>
-    </div>
+<form action="search">
+    <input type="text" id="keywords" class="form-control row" >
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+<div class="result">
+    <ul>
+
+    </ul>
 </div>
 </body>
 </html>
