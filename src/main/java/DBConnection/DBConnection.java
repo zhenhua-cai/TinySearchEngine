@@ -9,14 +9,22 @@ public class DBConnection {
     private static final String SERVERIP="18.218.112.101";
     private static final String USER="tinysearch";
     private static final String PASSWORD="tinysearch";
-    private static final String DBNAE="tinysearch";
+    private static final String DBNAME ="tinysearch";
     private static final int PORT=3306;
 
     private static Connection connection=null;
     private static PreparedStatement preparedStatement=null;
     private static boolean isConnectable=false;
 
-
+    static{
+        try {
+            DBConnection.connectDB();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * connect to the mysql database;
      * @return return true if successfully connect DB, otherwise return false
@@ -26,7 +34,7 @@ public class DBConnection {
     public static void connectDB() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection =DriverManager
-                .getConnection("jdbc:mysql://"+SERVERIP+":"+PORT+""+DBNAE+"?",
+                .getConnection("jdbc:mysql://"+SERVERIP+":"+PORT+"/"+ DBNAME +"?",
                         USER, PASSWORD);
         isConnectable=true;
     }
@@ -58,13 +66,17 @@ public class DBConnection {
      * @return return ResultSet
      * @throws SQLException
      */
-    public static ResultSet retrieve(String table,String ...col) throws SQLException {
+    public static ResultSet search(String table,String condition, String ...col) throws SQLException {
         //mysql select command
         StringBuilder command=new StringBuilder("select ");
         for(String s:col)
             command.append(s+", ");
         command.deleteCharAt(command.length()-2);
-        command.append(" from "+table+";");
+        command.append(" from "+table);
+        if(col.length>0){
+            command.append(" where "+condition);
+        }
+        command.append(";");
 
         //execute mysql select command.
 

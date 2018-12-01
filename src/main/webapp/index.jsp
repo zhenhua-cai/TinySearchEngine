@@ -15,7 +15,7 @@
             <small class="form-text text-muted">--CS355 Term Project</small>
         </div>
         <form action="search" class="search-form center">
-            <input type="text" id="keywords" class="form-control row" >
+            <input type="text" id="keywords" class="form-control row" name="search">
         </form>
     </div>
 </div>
