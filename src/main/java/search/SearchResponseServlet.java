@@ -20,15 +20,17 @@ import java.util.List;
 )
 public class SearchResponseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //get the input query string.
         String queryString=request.getParameter("search");
-
         try {
             List<Page> results=searchDB(queryString);
+            //forword request to result.jsp.
             request.setAttribute("results",results);
             request.getRequestDispatcher("result.jsp").forward(request,response);
 
         }
         catch(Exception ex){
+            //if there are exception, prints to console.
             ex.printStackTrace();
             PrintWriter writer=response.getWriter();
             writer.write("System error!\nCannot get the search results. Please try later.");
@@ -56,9 +58,11 @@ public class SearchResponseServlet extends HttpServlet {
      * @throws ClassNotFoundException
      */
     private List<Page> searchDB(String queryString) throws SQLException, ClassNotFoundException {
+        //split query string into keywords.
         String[] keywords=getKeywords(queryString);
         List<Page> results=new LinkedList<>();
         for(String keyword:keywords) {
+            //search each keyword.
             ResultSet wordIDs = DBConnection.search("word", "word = '" + keyword+"'", "wordID");
             int index = 1;
             while (wordIDs.next()) {
@@ -66,6 +70,7 @@ public class SearchResponseServlet extends HttpServlet {
                 int j = 1;
                 while (pageIDs.next()) {
                     ResultSet pages = DBConnection.search("page", "pageID=" + pageIDs.getInt(j++));
+                    //Create a page object.
                     if (pages.next()) {
                         Page p = new Page(pages.getString(1),
                                 pages.getString(2),
