@@ -1,6 +1,5 @@
 package DBConnection;
 
-import javax.naming.Name;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
