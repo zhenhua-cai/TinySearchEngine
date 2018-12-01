@@ -2,6 +2,8 @@ package search;
 
 import DBConnection.DBConnection;
 import DBConnection.Page;
+import scraping.Scraping;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

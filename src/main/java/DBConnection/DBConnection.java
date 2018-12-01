@@ -79,7 +79,7 @@ public class DBConnection {
         command.append(";");
 
         //execute mysql select command.
-
+//        System.out.println(command.toString());
         ResultSet result=null;
         preparedStatement = connection.prepareStatement(command.toString());
         result = preparedStatement.executeQuery();
@@ -107,7 +107,7 @@ public class DBConnection {
         command.deleteCharAt(command.length()-2);
         command.append(") values(");
         values.forEach(v->{
-            command.append(v+", ");
+            command.append("'"+v+"', ");
         });
         command.deleteCharAt(command.length()-2);
         command.append(");");

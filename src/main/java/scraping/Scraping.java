@@ -4,7 +4,6 @@ import DBConnection.DBConnection;
 import DBConnection.NameValuePair;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,6 +13,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public class Scraping extends Thread{
     private static String startingURL="https://www.cbsnews.com";
@@ -26,23 +26,21 @@ public class Scraping extends Thread{
     public static void setStartingURL(String url){
         startingURL=url;
     }
-    public static void startScraping(){
-        isScrapying=true;
-    }
     public static void stopScraping(){
         isScrapying=false;
     }
     public static void changeStatus(){
         isScrapying=isScrapying^true;
     }
-    public static void scraping() {
+    public static void startScraping() {
+        isScrapying=true;
         crawlingURL(startingURL);
     }
     private static void crawlingURL(String startingURL){
         if(!isScrapying) return;
         int pageID,wordID;
         try {
-            ResultSet page=DBConnection.search("page","url='"+startingURL+"'");
+            ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
             if(page.next()) return;
 
         } catch (SQLException e) {
@@ -64,12 +62,14 @@ public class Scraping extends Thread{
              title= dom.head().getElementsByTag("title").get(0).text();
 
         }catch(Exception ex){
+            ex.printStackTrace();
             return;
         }
         if(es.size()==0) return;
         Element e=es.get(0);
         String content=e.attr("content");
         if(content.equals("")) {
+
             return;
         }
         Date date= Date.valueOf(LocalDate.now());
@@ -79,26 +79,37 @@ public class Scraping extends Thread{
                     new NameValuePair("title",title),
                     new NameValuePair("last_modified",date)
             );
-            ResultSet page=DBConnection.search("page","url='"+startingURL+"'");
-            pageID=page.getInt(1);
+            ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
+            if(page.next()) {
+                pageID = page.getInt(1);
+            }
+            else{
+                return;
+            }
         } catch (SQLException e1) {
             e1.printStackTrace();
             return;
         }
         String body=dom.body().text();
         String[] keywords=content.split(",");
+
         for(String word:keywords) {
             try {
                 word=word.trim();
-                ResultSet result=DBConnection.search("word","word="+word,"wordID");
+                ResultSet result=DBConnection.search("word","word='"+word+"'","wordID");
                 if(result.next()){
                     wordID=result.getInt(1);
 
                 }
                 else{
                     DBConnection.insert("word",new NameValuePair("word",word));
-                    ResultSet newResult=DBConnection.search("word","word="+word,"wordID");
-                    wordID=newResult.getInt(1);
+                    ResultSet newResult=DBConnection.search("word","word like '%"+word+"%'","wordID");
+                    if(newResult.next())
+                        wordID=newResult.getInt(1);
+                    else{
+
+                        continue;
+                    }
                 }
                 String description=AnalyzeString.getPara(body,word);
                 DBConnection.insert("page_word",
@@ -107,20 +118,22 @@ public class Scraping extends Thread{
                         new NameValuePair("description",description),
                         new NameValuePair("frequency",0)
                 );
-            } catch (SQLException e1) {}
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
         Elements links=dom.body().getElementsByTag("a");
         for(Element link:links) {
-            String url=link.attr("href");
-
+            String url=link.attr("href").trim();
             if(url.startsWith("/")) {
+                if(url.length()==1) continue;
                 url=startingURL+url;
             }
             else if(url.startsWith("#")) continue;
             else if(!url.startsWith("http")) continue;
 
             try {
-                ResultSet r=DBConnection.search("page","url='"+url+"'");
+                ResultSet r=DBConnection.search("page","url='"+url+"'","pageID");
                 if(!r.next()) {
                     crawlingURL(url);
                 }
@@ -130,6 +143,6 @@ public class Scraping extends Thread{
         }
     }
     public void run(){
-        scraping();
+        startScraping();
     }
 }

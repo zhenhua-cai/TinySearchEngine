@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 )
 public class ManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println(request.getAttribute("changestatus"));
         Scraping scraping=new Scraping();
         scraping.start();
 
@@ -24,7 +24,6 @@ public class ManagerServlet extends HttpServlet {
         PrintWriter writer=response.getWriter();
         writer.write("<h1>Started successfully</h1>");
         writer.close();
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
