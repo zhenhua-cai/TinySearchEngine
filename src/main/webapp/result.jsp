@@ -20,7 +20,17 @@
         <%
             List<Page> results=(List<Page>)request.getAttribute("results");
             String keywords=(String)request.getAttribute("keyword");
-
+            for(Page p:results){
+        %>
+        <li>
+            <%=p.getTitle()%>
+            <small><%=p.getUrl()%></small>
+            <div>
+                <%=p.getDescription()%>
+            </div>
+        </li>
+        <%
+            }
         %>
     </ul>
 </div>

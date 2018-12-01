@@ -6,8 +6,12 @@ public class Page {
     private int pageID;
     private String url;
     private String title;
-    private String sentence;
     private Date lastModified;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
     private int wordID;
 
     public int getPageID() {
@@ -22,35 +26,31 @@ public class Page {
         return title;
     }
 
-    public String getSentence() {
-        return sentence;
-    }
-
     public int getWordID() {
         return wordID;
     }
 
-    public Page(int pageID, String url, String title, String sentence, Date lastModified, int wordID) {
+    public Page(int pageID, String url, String title, Date lastModified, int wordID) {
         this.pageID = pageID;
         this.url = url;
         this.title = title;
-        this.sentence = sentence;
         this.lastModified = lastModified;
         this.wordID = wordID;
     }
 
-    public Page(String url, String title, String sentence, int wordID) {
+    public Page(String url, String title, Date lastModified, int wordID) {
         this.url = url;
         this.title = title;
-        this.sentence = sentence;
+        this.lastModified = lastModified;
         this.wordID = wordID;
     }
 
-    public Page(String url, String title, String sentence, Date lastModified, int wordID) {
+    public Page(int pageID, String url, String title, Date lastModified, String description, int wordID) {
+        this.pageID = pageID;
         this.url = url;
         this.title = title;
-        this.sentence = sentence;
         this.lastModified = lastModified;
+        this.description = description;
         this.wordID = wordID;
     }
 
@@ -70,32 +70,13 @@ public class Page {
         this.title = title;
     }
 
-    public Page(String url, String title, String sentence) {
+    public Page(String url, String title) {
         this.url = url;
         this.title = title;
-        this.sentence = sentence;
-    }
-
-    public Page(String url, String title, String sentence, Date lastModified) {
-        this.url = url;
-        this.title = title;
-        this.sentence = sentence;
-        this.lastModified = lastModified;
-    }
-
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
     }
 
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }
 
-    public Page(int p, String u, String t, String s, Date l){
-        pageID=p;
-        url=u;
-        title=t;
-        sentence=s;
-        lastModified=l;
-    }
 }

@@ -70,23 +70,26 @@ public class SearchResponseServlet extends HttpServlet {
             ResultSet wordIDs = DBConnection.search("word", "word like '%" + keyword+"%'", "wordID");
             int index = 1;
             while (wordIDs.next()) {
-                int wordID=wordIDs.getInt(index++);
-                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordID, "pageID");
+                int wordID=wordIDs.getInt(1);
+                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordID, "*","description");
+
                 int j = 1;
                 while (pageIDs.next()) {
-                    ResultSet pages = DBConnection.search("page", "pageID=" + pageIDs.getInt(j++));
+                    String description=pageIDs.getString(2);
+                    ResultSet pages = DBConnection.search("page", "pageID=" + pageIDs.getInt(1),"*");
                     //Create a page object.
                     if (pages.next()) {
                         Page p = new Page(
                                 pages.getInt(1),
                                 pages.getString(2),
                                 pages.getString(3),
-                                pages.getString(4),
-                                pages.getDate(5),
+                                pages.getDate(4),
+                                description,
                                 wordID
                         );
                         results.add(p);
                     }
+
                 }
             }
         }
