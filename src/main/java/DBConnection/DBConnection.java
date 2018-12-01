@@ -94,8 +94,8 @@ public class DBConnection {
      * @throws SQLException
      */
     public static void insert(String table, NameValuePair... pairs) throws SQLException {
-        List<String> names=new LinkedList<>(),
-                values= new LinkedList<String>();
+        List<String> names=new LinkedList<>();
+        List<Object> values= new LinkedList<>();
         for(NameValuePair p:pairs){
             names.add(p.name);
             values.add(p.value);

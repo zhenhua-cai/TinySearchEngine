@@ -2,8 +2,8 @@ package DBConnection;
 
 public class NameValuePair {
     String name;
-    String value;
-    public NameValuePair(String name, String value){
+    Object value;
+    public NameValuePair(String name, Object value){
         this.name=name;
         this.value=value;
     }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,10 +25,9 @@ public class SearchResponseServlet extends HttpServlet {
         String queryString=request.getParameter("search");
         try {
             List<Page> results=searchDB(queryString);
-            //forword request to result.jsp.
+            //forward request to result.jsp.
             request.setAttribute("results",results);
             request.getRequestDispatcher("result.jsp").forward(request,response);
-
         }
         catch(Exception ex){
             //if there are exception, prints to console.
@@ -66,23 +66,29 @@ public class SearchResponseServlet extends HttpServlet {
             ResultSet wordIDs = DBConnection.search("word", "word = '" + keyword+"'", "wordID");
             int index = 1;
             while (wordIDs.next()) {
-                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordIDs.getInt(index++), "pageID");
+                int wordID=wordIDs.getInt(index++);
+                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordID, "pageID");
                 int j = 1;
                 while (pageIDs.next()) {
                     ResultSet pages = DBConnection.search("page", "pageID=" + pageIDs.getInt(j++));
                     //Create a page object.
                     if (pages.next()) {
-                        Page p = new Page(pages.getString(1),
+                        Page p = new Page(
+                                pages.getInt(1),
                                 pages.getString(2),
                                 pages.getString(3),
                                 pages.getString(4),
-                                pages.getDate(5)
+                                pages.getDate(5),
+                                wordID
                         );
                         results.add(p);
                     }
                 }
             }
         }
+        Collections.sort(results,(p1,p2)->{
+            return p1.getLastModified().compareTo(p2.getLastModified());
+        });
         return results;
     }
 }
