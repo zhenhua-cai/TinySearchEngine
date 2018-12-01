@@ -22,6 +22,7 @@ import java.util.List;
         urlPatterns = "/search"
 )
 public class SearchResponseServlet extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //get the input query string.
         String queryString=request.getParameter("search");
@@ -66,7 +67,7 @@ public class SearchResponseServlet extends HttpServlet {
         List<Page> results=new LinkedList<>();
         for(String keyword:keywords) {
             //search each keyword.
-            ResultSet wordIDs = DBConnection.search("word", "word = '" + keyword+"'", "wordID");
+            ResultSet wordIDs = DBConnection.search("word", "word like '%" + keyword+"%'", "wordID");
             int index = 1;
             while (wordIDs.next()) {
                 int wordID=wordIDs.getInt(index++);

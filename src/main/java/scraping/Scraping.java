@@ -41,7 +41,11 @@ public class Scraping extends Thread{
         int pageID,wordID;
         try {
             ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
-            if(page.next()) return;
+
+            if(page.next()) {
+                page.close();
+                return;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,6 +54,7 @@ public class Scraping extends Thread{
         HttpResponse<String> response;
         try {
             response=Unirest.get(startingURL).asString();
+            if(response.getStatus()!=200) return;
         }
         catch(Exception ex){
             ex.printStackTrace();
@@ -60,7 +65,7 @@ public class Scraping extends Thread{
         String title;
         try {
              title= dom.head().getElementsByTag("title").get(0).text();
-
+             if(title.length()>50) title=title.substring(0,50);
         }catch(Exception ex){
             ex.printStackTrace();
             return;
@@ -69,7 +74,6 @@ public class Scraping extends Thread{
         Element e=es.get(0);
         String content=e.attr("content");
         if(content.equals("")) {
-
             return;
         }
         Date date= Date.valueOf(LocalDate.now());
@@ -84,6 +88,7 @@ public class Scraping extends Thread{
                 pageID = page.getInt(1);
             }
             else{
+                page.close();
                 return;
             }
         } catch (SQLException e1) {
@@ -99,15 +104,14 @@ public class Scraping extends Thread{
                 ResultSet result=DBConnection.search("word","word='"+word+"'","wordID");
                 if(result.next()){
                     wordID=result.getInt(1);
-
                 }
                 else{
                     DBConnection.insert("word",new NameValuePair("word",word));
-                    ResultSet newResult=DBConnection.search("word","word like '%"+word+"%'","wordID");
+                    ResultSet newResult=DBConnection.search("word","word ='"+word+"'","wordID");
                     if(newResult.next())
                         wordID=newResult.getInt(1);
                     else{
-
+                        newResult.close();
                         continue;
                     }
                 }
@@ -131,10 +135,14 @@ public class Scraping extends Thread{
             }
             else if(url.startsWith("#")) continue;
             else if(!url.startsWith("http")) continue;
-
+            if(url.endsWith("/")){
+                url=url.substring(0,url.length()-1);
+            }
+            if(url.length()>255) continue;
             try {
                 ResultSet r=DBConnection.search("page","url='"+url+"'","pageID");
                 if(!r.next()) {
+                    r.close();
                     crawlingURL(url);
                 }
             } catch (SQLException e1) {

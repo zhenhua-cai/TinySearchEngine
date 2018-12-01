@@ -107,10 +107,11 @@ public class DBConnection {
         command.deleteCharAt(command.length()-2);
         command.append(") values(");
         values.forEach(v->{
-            command.append("'"+v+"', ");
+            command.append("\""+v+"\", ");
         });
         command.deleteCharAt(command.length()-2);
         command.append(");");
+        //System.out.println(command.toString());
         preparedStatement= connection.prepareStatement(command.toString());
         preparedStatement.executeUpdate();
     }
