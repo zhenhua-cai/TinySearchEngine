@@ -12,7 +12,7 @@
 </head>
 <body>
 <form action="search">
-    <input type="text" id="keywords" class="form-control row" >
+    <input type="text" id="keywords" class="form-control row" name="search" >
     <button type="submit" class="btn btn-success">Search</button>
 </form>
 <div class="result">
@@ -23,8 +23,12 @@
             for(Page p:results){
         %>
         <li>
-            <%=p.getTitle()%>
-            <small><%=p.getUrl()%></small>
+            <a href="<%=p.getUrl()%>"><%=p.getTitle()%></a>
+            <br>
+            <small><a href="<%=p.getUrl()%>"><%=p.getUrl()%></a></small>
+            <small class="form-text text-muted">Last Modified: &nbsp;<%=p.getLastModified()%>
+            </small>
+
             <div>
                 <%=p.getDescription()%>
             </div>

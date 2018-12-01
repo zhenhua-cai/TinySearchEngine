@@ -71,7 +71,7 @@ public class SearchResponseServlet extends HttpServlet {
             int index = 1;
             while (wordIDs.next()) {
                 int wordID=wordIDs.getInt(1);
-                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordID, "*","description");
+                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordID, "pageID","description");
 
                 int j = 1;
                 while (pageIDs.next()) {
