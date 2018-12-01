@@ -19,6 +19,7 @@
     <ul>
         <%
             List<Page> results=(List<Page>)request.getAttribute("results");
+            String keywords=(String)request.getAttribute("keyword");
 
         %>
     </ul>
