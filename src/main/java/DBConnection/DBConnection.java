@@ -104,6 +104,36 @@ public class DBConnection {
     }
 
     /**
+     * insert all columns into table.
+     * @param table table name.
+     * @param values values
+     * @throws SQLException
+     */
+    public static void insertAll(String table,String ... values) throws SQLException {
+        StringBuilder command=new StringBuilder("insert into "+table+" values(");
+        for(String v:values){
+            command.append("?,");
+        }
+        command.deleteCharAt(command.length()-1);
+        command.append(")");
+        preparedStatement=connection.prepareStatement(command.toString());
+        setValus(values);
+    }
+
+    /**
+     * set values for insertAll method.
+     * call this method after calling inertAll method.
+     * @param values
+     * @throws SQLException
+     */
+    public static void setValus(String...values) throws SQLException {
+        int index=1;
+        for(String v:values){
+            preparedStatement.setString(index++,v);
+            preparedStatement.executeUpdate();
+        }
+    }
+    /**
      * delete row in the table.
      * @param table table name.
      * @param condition condition to delete row.

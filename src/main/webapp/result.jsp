@@ -15,9 +15,8 @@
 </form>
 <div class="result">
     <ul>
-        <%
-            //list goes here
-        %>
+
+
     </ul>
 </div>
 </body>
