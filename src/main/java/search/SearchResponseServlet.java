@@ -27,6 +27,7 @@ public class SearchResponseServlet extends HttpServlet {
             List<Page> results=searchDB(queryString);
             //forward request to result.jsp.
             request.setAttribute("results",results);
+            request.setAttribute("keyword",queryString);
             request.getRequestDispatcher("result.jsp").forward(request,response);
         }
         catch(Exception ex){
