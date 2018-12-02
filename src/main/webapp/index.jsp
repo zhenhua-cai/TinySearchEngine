@@ -11,7 +11,7 @@
 <div class="container">
     <div class="center">
         <div class="center">
-            <h1><span id="tiny">Tiny </span> &nbsp;<span id="search">Search</span></h1>
+            <h1><span id="tiny">Tiny</span> &nbsp;<span id="search">Search</span></h1>
             <small class="form-text text-muted">--CS355 Term Project</small>
         </div>
         <form action="search" class="search-form center">
