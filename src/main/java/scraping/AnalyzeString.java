@@ -10,8 +10,7 @@ public class AnalyzeString {
     public static String getPara(String str,String keyword){
 
 
-       
-   String hold = "";
+    	String hold = "";
         
        hold = test1(str, keyword);
         
@@ -27,7 +26,7 @@ public class AnalyzeString {
 
         if(!str.contains(keyword))
 
-            hold1 = "There is no keyword in the analyzed paragraph";
+            hold1 = null;
 
         else
         {

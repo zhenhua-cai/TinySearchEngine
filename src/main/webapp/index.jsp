@@ -16,6 +16,7 @@
         </div>
         <form action="search" class="search-form center">
             <input type="text" id="keywords" class="form-control row" name="search">
+            <input type="hidden" id="startingIndex" name="startingIndex" value="0">
         </form>
     </div>
 </div>

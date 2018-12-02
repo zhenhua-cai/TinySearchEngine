@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @WebServlet(
         name = "SearchResponseServlet",
@@ -23,14 +21,19 @@ import java.util.List;
 )
 public class SearchResponseServlet extends HttpServlet {
 
+    static{
+        Scraping scraping=new Scraping();
+        scraping.start();
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //get the input query string.
         String queryString=request.getParameter("search");
         try {
-            List<Page> results=searchDB(queryString);
+            List<Page> results=searchDB(queryString,0);
             //forward request to result.jsp.
             request.setAttribute("results",results);
             request.setAttribute("keyword",queryString);
+            request.setAttribute("startingIndex",0);
             request.getRequestDispatcher("result.jsp").forward(request,response);
         }
         catch(Exception ex){
@@ -61,22 +64,26 @@ public class SearchResponseServlet extends HttpServlet {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private List<Page> searchDB(String queryString) throws SQLException, ClassNotFoundException {
+    private List<Page> searchDB(String queryString,int startingIndex) throws SQLException, ClassNotFoundException {
         //split query string into keywords.
         String[] keywords=getKeywords(queryString);
         List<Page> results=new LinkedList<>();
+        Set<Integer> ids=new HashSet<>();
         for(String keyword:keywords) {
             //search each keyword.
             ResultSet wordIDs = DBConnection.search("word", "word like '%" + keyword+"%'", "wordID");
-            int index = 1;
             while (wordIDs.next()) {
                 int wordID=wordIDs.getInt(1);
-                ResultSet pageIDs = DBConnection.search("page_word", "wordID=" + wordID, "pageID","description");
+                ResultSet pageIDs=DBConnection.search("select pageID,description from page_word where wordID="+wordID+" limit "+startingIndex+", 10");
 
-                int j = 1;
                 while (pageIDs.next()) {
+                    Integer pageID=pageIDs.getInt(1);
+                    if(ids.contains(pageID)){
+                        continue;
+                    }
+                    ids.add(pageID);
                     String description=pageIDs.getString(2);
-                    ResultSet pages = DBConnection.search("page", "pageID=" + pageIDs.getInt(1),"*");
+                    ResultSet pages = DBConnection.search("page", "pageID=" + pageID,"*");
                     //Create a page object.
                     if (pages.next()) {
                         Page p = new Page(

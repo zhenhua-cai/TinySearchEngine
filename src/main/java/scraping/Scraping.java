@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 public class Scraping extends Thread{
-    private static String startingURL="https://www.cbsnews.com";
+    private static String startingURL="https://www.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ";
     private static String USER_AGENT="User-Agent";
     private static String USER_AGENT_VALUE="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0";
     private static boolean isScrapying=false;
@@ -72,6 +72,7 @@ public class Scraping extends Thread{
         }
         if(es.size()==0) return;
         Element e=es.get(0);
+        String body=dom.body().text();
         String content=e.attr("content");
         if(content.equals("")) {
             return;
@@ -95,7 +96,7 @@ public class Scraping extends Thread{
             e1.printStackTrace();
             return;
         }
-        String body=dom.body().text();
+
         String[] keywords=content.split(",");
 
         for(String word:keywords) {
@@ -129,15 +130,20 @@ public class Scraping extends Thread{
         Elements links=dom.body().getElementsByTag("a");
         for(Element link:links) {
             String url=link.attr("href").trim();
-            if(url.startsWith("/")) {
-                if(url.length()==1) continue;
-                url=startingURL+url;
-            }
-            else if(url.startsWith("#")) continue;
-            else if(!url.startsWith("http")) continue;
-            if(url.endsWith("/")){
-                url=url.substring(0,url.length()-1);
-            }
+//            if(url.startsWith("/")) {
+//                continue;
+////                if(url.length()==1) continue;
+////                if(url.startsWith("//www")) {
+////                    url = startingURL.substring(0,startingURL.indexOf("://")+4) + url;
+////                }
+////                else
+////                    url=startingURL+url;
+//            }
+//            else if(url.startsWith("#")) continue;
+            if(!url.startsWith("http")) continue;
+//            if(url.endsWith("/")){
+//                url=url.substring(0,url.length()-1);
+//            }
             if(url.length()>255) continue;
             try {
                 ResultSet r=DBConnection.search("page","url='"+url+"'","pageID");

@@ -86,6 +86,13 @@ public class DBConnection {
         return result;
     }
 
+    public static ResultSet search(String command) throws SQLException {
+        ResultSet result=null;
+        preparedStatement = connection.prepareStatement(command);
+        result = preparedStatement.executeQuery();
+        return result;
+    }
+
     /**
      * insert values into table.
      * If the db connection hasn't been established,this method throws NullPointerException
