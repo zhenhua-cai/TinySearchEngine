@@ -22,53 +22,90 @@ public class AnalyzeString {
     	
     	String hold1 = "";
     	
-    	int stringHead, stringTail;
+    	int cutlength = 2;
+    	
+    	int stringHead, stringTail, dotcount = 0;
 
         if(!str.contains(keyword))
 
-            hold1 = null;
+            return null;
 
         else
         {
         	
         	stringHead = str.indexOf(keyword);
         	
-        	System.out.println(stringHead+"@@");
-        	
         	
         	stringTail = stringHead + keyword.length();
-        	
-        	System.out.println(stringTail+"##");
-        	
-        	System.out.println(str.length()+"$$");
         	
         	
         	if(stringHead==0)
         	{
-        		
-        		hold1 = str.substring(stringHead, stringTail+20);
-        		
-        		System.out.println("head shows");
-        		
+        		for(int i = stringTail; i<str.length();i++)
+        		{
+        			if(str.charAt(i) == '.')
+        			{
+        				dotcount++;
+        				
+        				if(dotcount == cutlength)hold1 = str.substring(stringHead, i);
+        			}
+        			
+        		}
         	}
         	
-        	if(stringTail == str.length())
+        	if(stringTail == str.length() - 1)
         	{
         		
-        		hold1 = str.substring(stringHead-20);// need correct;
-        		
-        		System.out.println("tail shows");
+        		for(int i = stringHead; i > 0; i--)
+        		{
+        			if(str.charAt(i) == '.')
+        			{
+        				dotcount++;
+        				
+        				if(dotcount == cutlength)
+        					
+        				hold1 = str.substring(i + 1);
+        				
+        			}
+        		}
         	
         	}
         	
-        	if(stringHead != 0 && stringTail!=str.length())
+        	if(stringHead != 0 && stringTail!=str.length()-1)
         	{
+        		int spotHead = 0, spotTail = 0;
         		
-        		hold1 = str.substring(stringHead-10, stringTail+10);
+        		for( int i = stringHead; i > 0; i--){
+        			
+        			if(str.charAt(i) == '.') 
+        			{
+        				
+        				dotcount++;
+        				
+        				if(dotcount == cutlength - 1)
+        				
+        				spotHead = i;
+        				
+        				break;
+        			}
+        		}
         		
-        	}
-        	
-        	
+        		for( int i = stringTail; i < str.length(); i++)
+        		{
+        			if(str.charAt(i) == '.')
+        			{
+        				
+        				dotcount++;
+        				
+        				if(dotcount == cutlength)
+        					
+        				spotTail = i;
+        			}
+        		}
+        		
+        		hold1 = str.substring(spotHead+1, spotTail+1);
+        		
+        	}	
         		
         }
         
