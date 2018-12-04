@@ -8,17 +8,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <div class="center">
-        <div class="center">
-            <h1><span id="tiny">Tiny</span> &nbsp;<span id="search">Search</span></h1>
-            <small class="form-text text-muted">--CS355 Term Project</small>
-        </div>
-        <form action="search" class="search-form center">
-            <input type="text" id="keywords" class="form-control row" name="search">
-            <input type="hidden" id="startingIndex" name="startingIndex" value="0">
-        </form>
+<main>
+    <div id="setting-link">
+        <a href="manager.jsp">Manage</a>
     </div>
-</div>
+    <div class="container">
+        <div class="center">
+            <div class="center">
+                <h1><span id="tiny">Tiny</span> &nbsp;<span id="search">Search</span></h1>
+                <small class="form-text text-muted">--CS355 Term Project</small>
+            </div>
+            <form action="search" class="search-form center">
+                <input type="text" id="keywords" class="form-control row" name="search">
+                <input type="hidden" id="startingIndex" name="startingIndex" value="0">
+            </form>
+        </div>
+    </div>
+</main>
 </body>
 </html>

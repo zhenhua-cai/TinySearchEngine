@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 )
 public class ManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(request.getAttribute("changestatus"));
+        System.out.println(request.getAttribute("action"));
         Scraping scraping=new Scraping();
         scraping.start();
 
