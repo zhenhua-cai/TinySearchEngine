@@ -25,10 +25,14 @@
 
 }
 .fas{
-    margin-top: 10.5px;
+    margin-top: 10px;
     margin-left: -25px;
     color: #877c91;
 }
+#clickableAwesomeFont{
+    cursor: pointer;
+}
+
 .btn{
     margin-left: 7px;
     background-color: #8ad2ff;

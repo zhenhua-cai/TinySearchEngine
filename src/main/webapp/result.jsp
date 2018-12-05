@@ -19,7 +19,7 @@
     <div class="searchBar">
         <form action="search">
             <input type="text" id="keywords" class="form-control" name="search">
-            <span type="submit"><i class="fas fa-search"></i></span>
+            <span id='clickableAwesomeFont'><i class="fas fa-search"></i></span>
             <%--<button type="submit" class="btn">Search</button>--%>
         </form>
     </div>
