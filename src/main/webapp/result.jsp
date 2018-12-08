@@ -34,7 +34,7 @@
             for(Page p:results){
         %>
         <li>
-            <a href="<%=p.getUrl()%>"><%=p.getTitle()%></a>
+            <a href="<%=p.getUrl()%>" onclick="update(event)"><%=p.getTitle()%></a>
             <br>
             <span class="url"><a href="<%=p.getUrl()%>"><%=p.getUrl()%></a></span>
             <div id="desc">
@@ -49,5 +49,10 @@
         %>
     </ul>
 </div>
+<script>
+    function update(event){
+       console.log(event.url);
+    }
+</script>
 </body>
 </html>

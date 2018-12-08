@@ -76,7 +76,7 @@ public class SearchResponseServlet extends HttpServlet {
             ResultSet wordIDs = DBConnection.search( "select wordID from word where word like '%"+keyword+"%' limit "+startingIndex+", 10");
             while (wordIDs.next()) {
                 int wordID=wordIDs.getInt(1);
-                ResultSet pageIDs=DBConnection.search("select pageID,description from page_word where wordID="+wordID+" limit "+startingIndex+", 10");
+                ResultSet pageIDs=DBConnection.search("select pageID,description,frequency from page_word where wordID="+wordID+" limit "+startingIndex+", 10");
 
                 while (pageIDs.next()) {
                     Integer pageID=pageIDs.getInt(1);
@@ -85,6 +85,8 @@ public class SearchResponseServlet extends HttpServlet {
                     }
                     ids.add(pageID);
                     String description=pageIDs.getString(2);
+                    Integer frequency=pageIDs.getInt(3);
+
                     ResultSet pages = DBConnection.search("page", "pageID=" + pageID,"*");
                     //Create a page object.
                     if (pages.next()) {
@@ -96,15 +98,21 @@ public class SearchResponseServlet extends HttpServlet {
                                 description,
                                 wordID
                         );
+                        p.setFrenquence(frequency);
                         results.add(p);
                     }
-
                 }
             }
         }
         Collections.sort(results,(p1,p2)->{
-            return p1.getLastModified().compareTo(p2.getLastModified());
+            return p1.getFrenquence()-p2.getFrenquence();
         });
+//        Collections.sort(results, new Comparator<Page>() {
+//            @Override
+//            public int compare(Page o1, Page o2) {
+//                return o1.getFrenquence()-o2.getFrenquence();
+//            }
+//        });
         return results;
     }
 }

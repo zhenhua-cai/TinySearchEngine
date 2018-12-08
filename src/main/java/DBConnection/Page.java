@@ -7,7 +7,17 @@ public class Page {
     private String url;
     private String title;
     private Date lastModified;
+
+    public void setFrenquence(int frenquence) {
+        this.frenquence = frenquence;
+    }
+
+    public int getFrenquence() {
+        return frenquence;
+    }
+
     private String description;
+    private int frenquence;
 
     public String getDescription() {
         return description;
