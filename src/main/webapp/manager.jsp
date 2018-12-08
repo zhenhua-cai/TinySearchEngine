@@ -17,28 +17,32 @@
     <h1><span id="tiny">Tiny</span> &nbsp;<span id="search">Search</span></h1>
 </div>
 <div class="auto">
-<form>
+<form class="auto" action="manageDB" method="POST">
     <fieldset class="fieldset-auto-width">
         <legend>Manage:</legend>
-<div>
-    <%
-        String message=(String) request.getAttribute("message");
-        message=(message==null?"":message);
-    %>
-    <span id="message"><%=message%></span>
-</div>
+            <div>
+                <%
+                    String message=(String) request.getAttribute("message");
+                    Integer status= (Integer) request.getAttribute("status");
+                    status=(status==null)?0:status;
+                    message=(message==null?"":message);
+                %>
+                <input type="hidden" name="status" value="<%=status%>">
+                <span id="message" style="color:<%=
+                      status==0?"green":status==1?"yellow":"red"
+                %>"><%=message%></span>
+            </div>
 
-<form class="auto" action="manageDB" method="POST">
-    <input type="radio" name="action" value="start" onclick="showInput()">Start
-    <input type="radio" name="action" value="stop" onclick="hideInput()">Stop
-    <br>
+                <input type="radio" name="action" value="start" onclick="showInput()">Start
+                <input type="radio" name="action" value="stop" onclick="hideInput()">Stop
+                <br>
 
-    <div id="urlinput">
-    <label for="url">Enter the starting URL:</label>
-    <input type="URL" id="url" name="url" value="" required>
-    </div>
-    <input type="submit">
-</form>
+                <div id="urlinput">
+                <label for="url">Enter the starting URL:</label>
+                <input type="URL" id="url" name="url" value="" required>
+                </div>
+                <input type="submit">
+
     </fieldset>
 </form>
 </div>
@@ -63,6 +67,7 @@
                         {"Word ID", "Word"},
                         {"Page ID","Word ID","Frequency","Description"}
                 };
+                System.out.println(message+"**");
                 if(table.equals("page")) {
                     int index=0;
                     while(index<tables[0].length) {
@@ -127,7 +132,6 @@
     let urlinput=document.getElementById("url");
     let messagediv=document.getElementById("message");
     let resultdiv=document.getElementById("result");
-
     function showInput(){
         inputdiv.style.display="block";
         urlinput.value="";

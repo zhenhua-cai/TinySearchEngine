@@ -19,11 +19,14 @@ import java.io.Serializable;
 public class ManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action=request.getParameter("action");
+        System.out.println(action+"---");
         String url=request.getParameter("url");
         String message="";
+        int status=0;
         if(action.equals("start")){
             if(url.equals("")){
                 message="URL input cannot be empty";
+                status=2;
             }
             else{
                 if(!Scraping.isRuning()){
@@ -31,22 +34,27 @@ public class ManagerServlet extends HttpServlet {
                     Scraping.setStartingURL(url);
                     Scraping scraping=new Scraping();
                     scraping.start();
+                    status=0;
                 }
                 else{
                     message="Scraping is already running.";
+                    status=1;
                 }
             }
         }
         else {
             if(!Scraping.isRuning()){
                 message="Scraping hasn't been started!";
+                status=1;
             }
             else {
                 message="Scraping is stopping!";
                 Scraping.stopScraping();
+                status=0;
             }
         }
         request.setAttribute("message",message);
+        request.setAttribute("status",status);
         request.getRequestDispatcher("manager.jsp").forward(request,response);
 
         response.setContentType("text/html");
