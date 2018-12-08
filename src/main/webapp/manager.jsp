@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="manager.css">
 </head>
 <body>
+<div class="center">
+    <h1><span id="tiny">Tiny</span> &nbsp;<span id="search">Search</span></h1>
+</div>
+<div class="auto">
+<form>
+    <fieldset class="fieldset-auto-width">
+        <legend>Manage:</legend>
 <div>
     <%
         String message=(String) request.getAttribute("message");
@@ -21,7 +28,7 @@
     <span id="message"><%=message%></span>
 </div>
 
-<form action="manageDB" method="POST">
+<form class="auto" action="manageDB" method="POST">
     <input type="radio" name="action" value="start" onclick="showInput()">Start
     <input type="radio" name="action" value="stop" onclick="hideInput()">Stop
     <br>
@@ -32,7 +39,9 @@
     </div>
     <input type="submit">
 </form>
-
+    </fieldset>
+</form>
+</div>
 <hr>
 <h5>Database Tables</h5>
 <form action="database" method="POST">
@@ -123,13 +132,13 @@
         inputdiv.style.display="block";
         urlinput.value="";
         urlinput.removeAttribute("disabled");
-        messagediv.outerText="";
+        messagediv.innerText="";
     }
     function hideInput(){
         inputdiv.style.display="none";
         urlinput.value="";
         urlinput.disabled='true';
-        messagediv.outerText="";
+        messagediv.innerText="";
     }
 </script>
 </body>
