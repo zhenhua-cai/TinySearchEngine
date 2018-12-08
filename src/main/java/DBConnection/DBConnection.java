@@ -124,6 +124,15 @@ public class DBConnection {
     }
 
     /**
+     * insert data into db.
+     * @param command insert command
+     * @throws SQLException exception
+     */
+    public static void insert(String command) throws SQLException {
+        preparedStatement = connection.prepareStatement(command);
+        preparedStatement.executeUpdate();
+    }
+    /**
      * insert all columns into table.
      * @param table table name.
      * @param values values
@@ -153,6 +162,16 @@ public class DBConnection {
             preparedStatement.executeUpdate();
         }
     }
+
+    /**
+     * delete command
+     * @param command delete command
+     * @throws SQLException exception
+     */
+    public static void delete(String command) throws SQLException {
+        preparedStatement = connection.prepareStatement(command);
+        preparedStatement.executeUpdate();
+    }
     /**
      * delete row in the table.
      * @param table table name.
@@ -178,7 +197,10 @@ public class DBConnection {
         preparedStatement=connection.prepareStatement(command);
         preparedStatement.executeUpdate();
     }
-
+    public static void updateDB(String command) throws SQLException {
+        preparedStatement=connection.prepareStatement(command);
+        preparedStatement.executeUpdate();
+    }
     /**
      * get the mysql database connection.
      * @return return the connection.

@@ -28,6 +28,7 @@ public class SearchResponseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //get the input query string.
         String queryString=request.getParameter("search");
+
         try {
             List<Page> results=searchDB(queryString,0);
             //forward request to result.jsp.
@@ -71,7 +72,8 @@ public class SearchResponseServlet extends HttpServlet {
         Set<Integer> ids=new HashSet<>();
         for(String keyword:keywords) {
             //search each keyword.
-            ResultSet wordIDs = DBConnection.search("word", "word like '%" + keyword+"%'", "wordID");
+            //ResultSet wordIDs = DBConnection.search("word", "word like '%" + keyword+"%'", "wordID");
+            ResultSet wordIDs = DBConnection.search( "select wordID from word where word like '%"+keyword+"%' limit "+startingIndex+", 10");
             while (wordIDs.next()) {
                 int wordID=wordIDs.getInt(1);
                 ResultSet pageIDs=DBConnection.search("select pageID,description from page_word where wordID="+wordID+" limit "+startingIndex+", 10");
