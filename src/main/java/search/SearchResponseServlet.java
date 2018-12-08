@@ -20,11 +20,7 @@ import java.util.*;
         urlPatterns = "/search"
 )
 public class SearchResponseServlet extends HttpServlet {
-
-    static{
-        Scraping scraping=new Scraping();
-        scraping.start();
-    }
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //get the input query string.
         String queryString=request.getParameter("search");
