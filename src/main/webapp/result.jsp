@@ -12,14 +12,16 @@
     <link rel="stylesheet" href="result.css">
 </head>
 <body>
+<% String keywords=(String)request.getAttribute("keyword");%>
 <div class="searchPart">
     <div class="searchName">
         <p><span id="tiny">Tiny</span><span id="search">Search</span></p>
     </div>
     <div class="searchBar">
         <form action="search">
-            <input type="text" id="keywords" class="form-control" name="search">
-            <span id='clickableAwesomeFont'><i class="fas fa-search"></i></span>
+            <input type="text" id="keywords" class="form-control" name="search" value="<%=keywords%>">
+            <button style="background-color: Transparent; background-repeat:no-repeat; border: none;
+            cursor:pointer;" type="submit" id="keywords" name="search"><i class="fas fa-search"></i></button>
             <%--<button type="submit" class="btn">Search</button>--%>
         </form>
     </div>
@@ -29,14 +31,13 @@
     <ul style="list-style-type:none">
         <%
             List<Page> results=(List<Page>)request.getAttribute("results");
-            String keywords=(String)request.getAttribute("keyword");
             for(Page p:results){
         %>
         <li>
             <a href="<%=p.getUrl()%>"><%=p.getTitle()%></a>
             <br>
-            <small><a href="<%=p.getUrl()%>"><%=p.getUrl()%></a></small>
-            <div>
+            <span class="url"><a href="<%=p.getUrl()%>"><%=p.getUrl()%></a></span>
+            <div id="desc">
                 <%=p.getDescription()%>
             </div>
             <small class="form-text text-muted">Last Modified: &nbsp;<%=p.getLastModified()%>
