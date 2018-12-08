@@ -29,7 +29,8 @@ public class ManagerServlet extends HttpServlet {
                 if(!Scraping.isRuning()){
                     message="Scraping is starting.";
                     Scraping.setStartingURL(url);
-                    Scraping.startScraping();
+                    Scraping scraping=new Scraping();
+                    scraping.start();
                 }
                 else{
                     message="Scraping is already running.";

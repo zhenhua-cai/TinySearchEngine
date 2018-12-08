@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Scraping extends Thread{
-    private static String startingURL="https://www.youtube.com/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ";
+    private static String startingURL="https://www.cbsnews.com/";
     private static String USER_AGENT="User-Agent";
     private static String USER_AGENT_VALUE="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0";
     private static boolean isScrapying=false;
@@ -107,7 +107,8 @@ public class Scraping extends Thread{
                 }
                 else{
                     DBConnection.insert("word",new NameValuePair("word",word));
-                    ResultSet newResult=DBConnection.search("word","word ='"+word+"'","wordID");
+                   ResultSet newResult=DBConnection.search("word","word ='"+word+"'","wordID");
+                    //ResultSet newResult=DBConnection.search("select wordID from word where word='"+word+"' limit 0, 10");
                     if(newResult.next())
                         wordID=newResult.getInt(1);
                     else{
@@ -116,6 +117,7 @@ public class Scraping extends Thread{
                     }
                 }
                 String description=AnalyzeString.getPara(body,word);
+
                 DBConnection.insert("page_word",
                         new NameValuePair("pageID",pageID),
                         new NameValuePair("wordID",wordID),
