@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.LinkedList" %><%--
   Created by IntelliJ IDEA.
   User: zhenhua cai
   Date: 2018-12-01
@@ -33,19 +34,96 @@
 </form>
 
 <hr>
+<h5>Database Tables</h5>
+<form action="database" method="POST">
+    <input type="radio" name="database" value="page">Page
+    <input type="hidden" name="page_startingindex" value="0">
+    <input type="radio" name="database" value="word">Word
+    <input type="radio" name="database" value="page_word">Page_Word
+    <br>
+    <button type="submit">Query</button>
+</form>
+<div id="result">
+    <table>
+        <tr>
+            <%
+                String table = (String) request.getAttribute("table");
+                if(table==null) table="";
+                String[][] tables={
+                        {"Page ID","Page URL","Page Title","Last Modified"},
+                        {"Word ID", "Word"},
+                        {"Page ID","Word ID","Frequency","Description"}
+                };
+                if(table.equals("page")) {
+                    int index=0;
+                    while(index<tables[0].length) {
+            %>
+                <th>
+                    <%=tables[0][index]%>
+                </th>
+            <%
+                        ++index;
+                    }
+                }
+                else if(table.equals("word")){
+                    int index=0;
+                    while(index<tables[1].length) {
+            %>
+                    <th>
+                        <%=tables[1][index]%>
+                    </th>
+            <%
+                        ++index;
+                    }
+                }
+                else if(table.equals("page_word")){
+                    int index=0;
+                    while(index<tables[2].length) {
+            %>
+                    <th>
+                        <%=tables[2][index]%>
+                    </th>
+            <%
+                        ++index;
+                    }
+                }
+            %>
 
+        </tr>
+        <%
+
+            List<List<String>> result= (List<List<String>>) request.getAttribute("result");
+            if(result==null) result=new LinkedList<>();
+            for (List<String> row : result) {
+        %>
+            <tr>
+                <%
+                    for (String data : row) {
+                %>
+                <td>
+                    <%=data%>
+                </td>
+                <%
+                    }
+                %>
+            </tr>
+        <%
+            }
+        %>
+    </table>
+</div>
 
 <script>
     let inputdiv=document.getElementById("urlinput");
     let urlinput=document.getElementById("url");
     let messagediv=document.getElementById("message");
+    let resultdiv=docuement.getElementById("result");
 
     function showInput(){
         inputdiv.style.display="block";
         urlinput.value="";
         urlinput.removeAttribute("disabled");
         messagediv.outerText="";
-
     }
     function hideInput(){
         inputdiv.style.display="none";
