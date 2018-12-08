@@ -35,6 +35,7 @@ public class Scraping extends Thread{
         isScrapying=true;
         crawlingURL(startingURL);
     }
+    public static boolean isRuning(){return isScrapying;}
     private static void crawlingURL(String startingURL){
         if(!isScrapying) return;
         int pageID,wordID;

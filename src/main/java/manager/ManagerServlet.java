@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 @WebServlet(
         name = "ManagerServlet",
@@ -16,9 +18,35 @@ import java.io.PrintWriter;
 )
 public class ManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(request.getAttribute("action"));
-        Scraping scraping=new Scraping();
-        scraping.start();
+        String action=request.getParameter("action");
+        String url=request.getParameter("url");
+        String message="";
+        if(action.equals("start")){
+            if(url.equals("")){
+                message="URL input cannot be empty";
+            }
+            else{
+                if(!Scraping.isRuning()){
+                    message="Scraping is starting.";
+                    Scraping.setStartingURL(url);
+                    Scraping.startScraping();
+                }
+                else{
+                    message="Scraping is already running.";
+                }
+            }
+        }
+        else {
+            if(!Scraping.isRuning()){
+                message="Scraping hasn't been started!";
+            }
+            else {
+                message="Scraping is stopping!";
+                Scraping.stopScraping();
+            }
+        }
+        request.setAttribute("message",message);
+        request.getRequestDispatcher("manager.jsp").forward(request,response);
 
         response.setContentType("text/html");
         PrintWriter writer=response.getWriter();
