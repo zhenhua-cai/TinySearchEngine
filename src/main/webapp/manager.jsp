@@ -126,7 +126,7 @@
     let inputdiv=document.getElementById("urlinput");
     let urlinput=document.getElementById("url");
     let messagediv=document.getElementById("message");
-    let resultdiv=docuement.getElementById("result");
+    let resultdiv=document.getElementById("result");
 
     function showInput(){
         inputdiv.style.display="block";
