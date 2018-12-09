@@ -84,7 +84,9 @@ public class Scraping extends Thread{
         if(content.equals("")) {
             return;
         }
-        java.sql.Timestamp time= Timestamp.valueOf(LocalDateTime.now());
+
+       // java.sql.Timestamp time= Timestamp.valueOf(LocalDateTime.now());
+
         Date date= Date.valueOf(LocalDate.now());
         try {
             DBConnection.insert("page",
@@ -104,7 +106,6 @@ public class Scraping extends Thread{
             e1.printStackTrace();
             return;
         }
-
         String[] keywords=content.split(",");
 
         for(String word:keywords) {

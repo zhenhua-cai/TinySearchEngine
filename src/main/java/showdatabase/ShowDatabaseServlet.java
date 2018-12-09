@@ -54,7 +54,6 @@ public class ShowDatabaseServlet extends HttpServlet {
                         if(str.length()>50)
                             str=str.substring(0,50)+"...";
                         row.add(str);
-
                         break;
                     case "word":
 
@@ -63,7 +62,6 @@ public class ShowDatabaseServlet extends HttpServlet {
                         if(str2.length()>50)
                             str2=str2.substring(0,50)+"...";
                         row.add(str2);
-
                         break;
                     case "page_word":
                         row.add(String.valueOf(resultSet.getInt(1)));

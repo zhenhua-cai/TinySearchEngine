@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="result.css">
 </head>
 <body>
-<% String keywords=(String)request.getAttribute("keyword");%>
+<div id="setting-link">
+    <a href="manager.jsp">Manage</a>
+</div>
 <div class="searchPart">
     <div class="searchName">
         <p><span id="tiny">Tiny</span><span id="search">Search</span></p>
