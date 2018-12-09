@@ -139,6 +139,13 @@
                     }
                 %>
             </table>
+            <%
+                if(result.size()!=0){
+            %>
+            <span class="form-text text-muted" style="padding-top: 20px">Only show first 50 rows</span>
+            <%
+                }
+            %>
         </div>
     </fieldset>
 </form>

@@ -35,6 +35,7 @@ public class Scraping extends Thread{
     public static void startScraping() {
         isScrapying=true;
         crawlingURL(startingURL);
+        isScrapying=false;
     }
     public static boolean isRuning(){return isScrapying;}
 

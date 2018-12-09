@@ -34,7 +34,13 @@
     <ul style="list-style-type:none">
         <%
             List<Page> results=(List<Page>)request.getAttribute("results");
-            for(Page p:results){
+            if(results.size()==0){
+                %>
+        <span class="form-text text-muted">No results found.</span>
+        <%
+            }
+            else{
+                for(Page p:results){
         %>
         <li>
             <a href="<%=p.getUrl()%>"><%=p.getTitle()%><input type="hidden" value="<%=p.getWordID()%>"></a>
@@ -43,10 +49,14 @@
             <div id="desc">
                 <%=p.getDescription().equals("null")?"":p.getDescription()%>
             </div>
-            <small class="form-text text-muted">Last Modified: &nbsp;<%=p.getLastModified()%>
-            </small>
+            <span class="form-text text-muted">Last Modified: &nbsp;<%=p.getLastModified()%>
+            </span>
             <br/>
         </li>
+        <%
+                }
+                %>
+        <small class="form-text text-muted">Only show parts of the results</small>
         <%
             }
         %>
