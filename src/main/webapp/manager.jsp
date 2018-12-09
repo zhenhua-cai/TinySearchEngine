@@ -13,13 +13,16 @@
     <link rel="stylesheet" href="manager.css">
 </head>
 <body>
+<div id="setting-link">
+    <a href="index.jsp">Search</a>
+</div>
 <div class="center">
     <h1><span id="tiny">Tiny</span><span id="search">Search</span></h1>
 </div>
 <div class="auto">
 <form action="manageDB" method="POST">
     <fieldset class="fieldset-auto-width">
-        <legend>Manage:</legend>
+        <legend>Manage Scraping:</legend>
             <div>
                 <%
                     String message=(String) request.getAttribute("message");
