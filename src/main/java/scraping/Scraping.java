@@ -10,8 +10,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.sql.*;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -88,82 +86,78 @@ public class Scraping extends Thread{
             ex.printStackTrace();
             return;
         }
-        if(es.size()==0) return;
-        Element e=es.get(0);
+        if(es.size()!=0) {
+            Element e = es.get(0);
 
-        String body=dom.body().text();
+            String body = dom.body().text();
 
-        String content=e.attr("content");
-        if(content.equals("")) {
-            return;
-        }
-
-        date= Timestamp.valueOf(LocalDateTime.now());
-        title=title.replace("\"","").replace("'","");
-        try {
-            if(!update) {
-                DBConnection.insert("page",
-                        new NameValuePair("url", startingURL),
-                        new NameValuePair("title", title),
-                        new NameValuePair("last_modified", date)
-                );
-                ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
-                if(page.next()) {
-                    pageID = page.getInt(1);
-                }
-                else{
-                    page.close();
-                    return;
-                }
+            String content = e.attr("content");
+            if (content.equals("")) {
+                return;
             }
-            else{
-                DBConnection.updateDB("update page set last_modified='"+date+"', title='"+title+"' where pageID='"+pageID+"';");
-            }
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return;
-        }
-        String[] keywords=content.split(",");
 
-        for(String word:keywords) {
+            date = Timestamp.valueOf(LocalDateTime.now());
+            title = title.replace("\"", "").replace("'", "");
             try {
-                word=word.trim();
-                ResultSet result=DBConnection.search("word","word='"+word+"'","wordID");
-                if(result.next()){
-                    wordID=result.getInt(1);
-                }
-                else{
-                    DBConnection.insert("word",new NameValuePair("word",word));
-                   ResultSet newResult=DBConnection.search("word","word ='"+word+"'","wordID");
-                    //ResultSet newResult=DBConnection.search("select wordID from word where word='"+word+"' limit 0, 10");
-                    if(newResult.next())
-                        wordID=newResult.getInt(1);
-                    else{
-                        newResult.close();
-                        continue;
-                    }
-                }
-                String description = AnalyzeString.getPara(body, word);
-                if(description!=null&&description.length()>255){
-                    description=description.substring(20,200);
-                }
-                else if(description!=null){
-                    description=description.replace("\"","").replace("'","");
-                }
-                if(!update) {
-                    DBConnection.insert("page_word",
-                            new NameValuePair("pageID", pageID),
-                            new NameValuePair("wordID", wordID),
-                            new NameValuePair("description", description),
-                            new NameValuePair("frequency", 0)
+                if (!update) {
+                    DBConnection.insert("page",
+                            new NameValuePair("url", startingURL),
+                            new NameValuePair("title", title),
+                            new NameValuePair("last_modified", date)
                     );
-                }
-                else{
-                    DBConnection.updateDB("update page_word set description='"+description
-                            +"' where pageID='"+pageID+"' and wordID='"+wordID+"';");
+                    ResultSet page = DBConnection.search("page", "url='" + startingURL + "'", "pageID");
+                    if (page.next()) {
+                        pageID = page.getInt(1);
+                    } else {
+                        page.close();
+                        return;
+                    }
+                } else {
+                    DBConnection.updateDB("update page set last_modified='" + date + "', title='" + title + "' where pageID='" + pageID + "';");
                 }
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                return;
+            }
+            String[] keywords = content.split(",");
+
+            for (String word : keywords) {
+                try {
+                    word = word.trim();
+                    ResultSet result = DBConnection.search("word", "word='" + word + "'", "wordID");
+                    if (result.next()) {
+                        wordID = result.getInt(1);
+                    } else {
+                        DBConnection.insert("word", new NameValuePair("word", word));
+                        ResultSet newResult = DBConnection.search("word", "word ='" + word + "'", "wordID");
+                        //ResultSet newResult=DBConnection.search("select wordID from word where word='"+word+"' limit 0, 10");
+                        if (newResult.next())
+                            wordID = newResult.getInt(1);
+                        else {
+                            newResult.close();
+                            continue;
+                        }
+                    }
+                    String description = AnalyzeString.getPara(body, word);
+                    if (description != null && description.length() > 255) {
+                        description = description.substring(20, 200);
+                    } else if (description != null) {
+                        description = description.replace("\"", "").replace("'", "");
+                    }
+                    if (!update) {
+                        DBConnection.insert("page_word",
+                                new NameValuePair("pageID", pageID),
+                                new NameValuePair("wordID", wordID),
+                                new NameValuePair("description", description),
+                                new NameValuePair("frequency", 0)
+                        );
+                    } else {
+                        DBConnection.updateDB("update page_word set description='" + description
+                                + "' where pageID='" + pageID + "' and wordID='" + wordID + "';");
+                    }
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
         Elements anchors=dom.body().getElementsByTag("a");

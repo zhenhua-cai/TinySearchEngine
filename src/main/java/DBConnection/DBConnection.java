@@ -6,7 +6,8 @@ import java.util.List;
 
 public class DBConnection {
 
-    private static final String SERVERIP="localhost";
+    //private static final String SERVERIP="localhost";//18.218.112.101
+    private static final String SERVERIP="18.218.112.101";//18.218.112.101
     private static final String USER="tinysearch";
     private static final String PASSWORD="tinysearch";
     private static final String DBNAME ="tinysearch";

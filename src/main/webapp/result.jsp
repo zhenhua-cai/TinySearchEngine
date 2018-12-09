@@ -70,7 +70,8 @@
             var data=this.href;
             var xhr = new XMLHttpRequest();
             var wordID=this.firstElementChild.value;
-            xhr.open("POST", "http://localhost:8080/TinySearchEngine_war_exploded/updatefrequency", true);
+            //xhr.open("POST", "http://localhost:8080/TinySearchEngine_war/updatefrequency", true);
+            xhr.open("POST", "http://ec2-18-218-112-101.us-east-2.compute.amazonaws.com:8080/TinySearchEngine/updatefrequency", true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify({
                 link:data,
