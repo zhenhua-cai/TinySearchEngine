@@ -12,7 +12,10 @@ import org.jsoup.select.Elements;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Scraping extends Thread{
     private static String startingURL="https://www.cbsnews.com/";
@@ -36,6 +39,11 @@ public class Scraping extends Thread{
         crawlingURL(startingURL);
     }
     public static boolean isRuning(){return isScrapying;}
+
+    /**
+     * scrapying web pages.
+     * @param startingURL starting url.
+     */
     private static void crawlingURL(String startingURL){
         if(!isScrapying) return;
         int pageID,wordID;
@@ -76,6 +84,7 @@ public class Scraping extends Thread{
         if(content.equals("")) {
             return;
         }
+        java.sql.Timestamp time= Timestamp.valueOf(LocalDateTime.now());
         Date date= Date.valueOf(LocalDate.now());
         try {
             DBConnection.insert("page",
@@ -128,21 +137,25 @@ public class Scraping extends Thread{
                 e1.printStackTrace();
             }
         }
-        Elements links=dom.body().getElementsByTag("a");
-        for(Element link:links) {
-            String url=link.attr("href").trim();
+        Elements anchors=dom.body().getElementsByTag("a");
+        Set<String> links=new HashSet<>();
+        for(Element anchor:anchors) {
+            String url=anchor.attr("href").trim();
             if(!url.startsWith("http")) continue;
             if(url.length()>255) continue;
             try {
                 ResultSet r=DBConnection.search("page","url='"+url+"'","pageID");
                 if(!r.next()) {
                     r.close();
-                    crawlingURL(url);
+                    links.add(url);
                 }
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
         }
+        links.forEach(link->{
+            crawlingURL(link);
+        });
     }
     public void run(){
         startScraping();
