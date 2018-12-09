@@ -1,3 +1,47 @@
+.searchPart{
+    background-color: #f2f2f2;
+    min-width: 100%;
+    height: 40px;
+    display: flex;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.SearchName{
+    display: flex;
+    float: left;
+    margin-left: 33px;
+    margin-top: -7px;
+}
+.searchBar{
+    float: left;
+    margin-left: 7px;
+}
+.form-control{
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 380px;
+    height: 30px;
+    border: #8ad2ff;
+
+}
+
+.fas{
+    margin-top: 11px;
+    margin-left: -47px;
+    color: #877c91;
+    cursor: pointer;
+}
+#tiny_{
+    color:dodgerblue;
+    font-size: 18px;
+}
+#search_{
+    color:coral;
+    font-size: 18px;
+}
 .center{
     margin: 0px auto 20px;
     text-align: center;

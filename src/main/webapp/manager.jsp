@@ -10,11 +10,22 @@
 <html>
 <head>
     <title>Manager|CS355</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="manager.css">
 </head>
 <body>
-<div id="setting-link">
-    <a href="index.jsp">Search</a>
+<div class="searchPart">
+    <div class="searchName">
+        <p><span id="tiny_">Tiny</span><span id="search_">Search</span></p>
+    </div>
+    <div class="searchBar">
+        <form action="search">
+            <input type="text" id="keywords" class="form-control" name="search">
+            <button style="background-color: Transparent; background-repeat:no-repeat; border: none;
+            cursor:pointer;" type="submit" id="keywords" name="search"><i class="fas fa-search"></i></button>
+            <%--<button type="submit" class="btn">Search</button>--%>
+        </form>
+    </div>
 </div>
 <div class="center">
     <h1><span id="tiny">Tiny</span><span id="search">Search</span></h1>
