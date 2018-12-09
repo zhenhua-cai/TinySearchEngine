@@ -14,10 +14,10 @@
 </head>
 <body>
 <div class="center">
-    <h1><span id="tiny">Tiny</span> &nbsp;<span id="search">Search</span></h1>
+    <h1><span id="tiny">Tiny</span><span id="search">Search</span></h1>
 </div>
 <div class="auto">
-<form class="auto" action="manageDB" method="POST">
+<form action="manageDB" method="POST">
     <fieldset class="fieldset-auto-width">
         <legend>Manage:</legend>
             <div>
@@ -28,104 +28,107 @@
                     message=(message==null?"":message);
                 %>
                 <input type="hidden" name="status" value="<%=status%>">
-                <span id="message" style="color:<%=
-                      status==0?"green":status==1?"yellow":"red"
+                <span class="auto" id="message" style="margin-bottom:5px; font-weight: bold; color:<%=
+                      status==0?"green":status==1?"orange":"red"
                 %>"><%=message%></span>
             </div>
-
+            <div class="choice-box">
                 <input type="radio" name="action" value="start" onclick="showInput()">Start
-                <input type="radio" name="action" value="stop" onclick="hideInput()">Stop
-                <br>
+                <input class="rs" type="radio" name="action" value="stop" onclick="hideInput()">Stop
+            </div>
 
-                <div id="urlinput">
+                <div class="auto" id="urlinput">
                 <label for="url">Enter the starting URL:</label>
                 <input type="URL" id="url" name="url" value="" required>
                 </div>
-                <input type="submit">
-
+            <div>
+                <input class="btn" type="submit">
+            </div>
     </fieldset>
 </form>
 </div>
-<hr>
-<h5>Database Tables</h5>
-<form action="database" method="POST">
-    <input type="radio" name="database" value="page">Page
-    <input type="hidden" name="page_startingindex" value="0">
-    <input type="radio" name="database" value="word">Word
-    <input type="radio" name="database" value="page_word">Page_Word
-    <br>
-    <button type="submit">Query</button>
-</form>
-<div id="result">
-    <table>
-        <tr>
-            <%
-                String table = (String) request.getAttribute("table");
-                if(table==null) table="";
-                String[][] tables={
-                        {"Page ID","Page URL","Page Title","Last Modified"},
-                        {"Word ID", "Word"},
-                        {"Page ID","Word ID","Frequency","Description"}
-                };
-                System.out.println(message+"**");
-                if(table.equals("page")) {
-                    int index=0;
-                    while(index<tables[0].length) {
-            %>
-                <th>
-                    <%=tables[0][index]%>
-                </th>
-            <%
-                        ++index;
+<form class="auto2" style="white-space: nowrap" action="database" method="POST">
+    <fieldset>
+        <legend>Database Tables:</legend>
+        <input type="radio" name="database" value="page">Page
+        <input type="hidden" name="page_startingindex" value="0">
+        <input class="rs" type="radio" name="database" value="word">Word
+        <input class="rs" type="radio" name="database" value="page_word">Page_Word
+        <button class="btn2" type="submit">Query</button>
+
+        <div id="result">
+            <table id="database">
+                <tr>
+                    <%
+                        String table = (String) request.getAttribute("table");
+                        if(table==null) table="";
+                        String[][] tables={
+                                {"Page ID","Page URL","Page Title","Last Modified"},
+                                {"Word ID", "Word"},
+                                {"Page ID","Word ID","Frequency","Description"}
+                        };
+                        System.out.println(message+"**");
+                        if(table.equals("page")) {
+                            int index=0;
+                            while(index<tables[0].length) {
+                    %>
+                    <th>
+                        <%=tables[0][index]%>
+                    </th>
+                    <%
+                            ++index;
+                        }
                     }
-                }
-                else if(table.equals("word")){
-                    int index=0;
-                    while(index<tables[1].length) {
-            %>
+                    else if(table.equals("word")){
+                        int index=0;
+                        while(index<tables[1].length) {
+                    %>
                     <th>
                         <%=tables[1][index]%>
                     </th>
-            <%
-                        ++index;
+                    <%
+                            ++index;
+                        }
                     }
-                }
-                else if(table.equals("page_word")){
-                    int index=0;
-                    while(index<tables[2].length) {
-            %>
+                    else if(table.equals("page_word")){
+                        int index=0;
+                        while(index<tables[2].length) {
+                    %>
                     <th>
                         <%=tables[2][index]%>
                     </th>
-            <%
-                        ++index;
-                    }
-                }
-            %>
+                    <%
+                                ++index;
+                            }
+                        }
+                    %>
 
-        </tr>
-        <%
-
-            List<List<String>> result= (List<List<String>>) request.getAttribute("result");
-            if(result==null) result=new LinkedList<>();
-            for (List<String> row : result) {
-        %>
-            <tr>
+                </tr>
                 <%
-                    for (String data : row) {
+
+                    List<List<String>> result= (List<List<String>>) request.getAttribute("result");
+                    if(result==null) result=new LinkedList<>();
+                    for (List<String> row : result) {
                 %>
-                <td>
-                    <%=data%>
-                </td>
+                <tr>
+                    <%
+                        for (String data : row) {
+                    %>
+                    <td>
+                        <%=data%>
+                    </td>
+                    <%
+                        }
+                    %>
+                </tr>
                 <%
                     }
                 %>
-            </tr>
-        <%
-            }
-        %>
-    </table>
-</div>
+            </table>
+        </div>
+    </fieldset>
+</form>
+
 
 <script>
     let inputdiv=document.getElementById("urlinput");
