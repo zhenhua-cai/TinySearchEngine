@@ -15,9 +15,6 @@
 </head>
 <body>
 <div class="searchPart">
-    <div class="searchName">
-        <p><span id="tiny_">Tiny</span><span id="search_">Search</span></p>
-    </div>
     <div class="searchBar">
         <form action="search">
             <input type="text" id="keywords" class="form-control" name="search">
@@ -26,6 +23,10 @@
             <%--<button type="submit" class="btn">Search</button>--%>
         </form>
     </div>
+    <div class="searchName">
+        <p><span id="tiny_">Tiny</span><span id="search_">Search</span></p>
+    </div>
+
 </div>
 <div class="center">
     <h1><span id="tiny">Tiny</span><span id="search">Search</span></h1>
@@ -81,7 +82,6 @@
                                 {"Word ID", "Word"},
                                 {"Page ID","Word ID","Frequency","Description"}
                         };
-                        System.out.println(message+"**");
                         if(table.equals("page")) {
                             int index=0;
                             while(index<tables[0].length) {

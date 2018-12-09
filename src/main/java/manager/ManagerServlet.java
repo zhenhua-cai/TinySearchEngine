@@ -19,7 +19,6 @@ import java.io.Serializable;
 public class ManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action=request.getParameter("action");
-        System.out.println(action+"---");
         String url=request.getParameter("url");
         String message="";
         int status=0;
@@ -57,10 +56,6 @@ public class ManagerServlet extends HttpServlet {
         request.setAttribute("status",status);
         request.getRequestDispatcher("manager.jsp").forward(request,response);
 
-        response.setContentType("text/html");
-        PrintWriter writer=response.getWriter();
-        writer.write("<h1>Started successfully</h1>");
-        writer.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

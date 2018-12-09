@@ -1,3 +1,6 @@
+body,html{
+    margin:0;
+}
 .searchPart{
     background-color: #f2f2f2;
     min-width: 100%;
@@ -10,12 +13,12 @@
 }
 .SearchName{
     display: flex;
-    float: left;
+    float: right;
     margin-left: 33px;
     margin-top: -7px;
 }
 .searchBar{
-    float: left;
+    float: right;
     margin-left: 7px;
 }
 button:focus {outline:0;}

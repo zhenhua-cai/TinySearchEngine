@@ -101,6 +101,7 @@ public class DBConnection {
      * @throws SQLException
      */
     public static void insert(String table, NameValuePair... pairs) throws SQLException {
+
         List<String> names=new LinkedList<>();
         List<Object> values= new LinkedList<>();
         for(NameValuePair p:pairs){
@@ -199,6 +200,7 @@ public class DBConnection {
     }
     public static void updateDB(String command) throws SQLException {
         preparedStatement=connection.prepareStatement(command);
+       // System.out.println(command);
         preparedStatement.executeUpdate();
     }
     /**

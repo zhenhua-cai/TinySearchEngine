@@ -72,7 +72,7 @@ public class SearchResponseServlet extends HttpServlet {
             ResultSet wordIDs = DBConnection.search( "select wordID from word where word like '%"+keyword+"%' limit "+startingIndex+", 10");
             while (wordIDs.next()) {
                 int wordID=wordIDs.getInt(1);
-                ResultSet pageIDs=DBConnection.search("select pageID,description,frequency from page_word where wordID="+wordID+" limit "+startingIndex+", 10");
+                ResultSet pageIDs=DBConnection.search("select pageID,description,frequency from page_word where wordID="+wordID+" order by frequency desc limit "+startingIndex+", 10");
 
                 while (pageIDs.next()) {
                     Integer pageID=pageIDs.getInt(1);
@@ -101,7 +101,18 @@ public class SearchResponseServlet extends HttpServlet {
             }
         }
         Collections.sort(results,(p1,p2)->{
-            return p2.getFrenquence()-p1.getFrenquence();
+            if(p2.getDescription().equals("null")&&p1.getDescription().equals("null")) {
+                return p2.getFrenquence() - p1.getFrenquence();
+            }
+            else if(p2.getDescription().equals("null")) {
+                return -1;
+            }
+            else if(p1.getDescription().equals("null")) {
+                return 1;
+            }
+            else{
+                return p2.getFrenquence()-p1.getFrenquence();
+            }
         });
 
         return results;

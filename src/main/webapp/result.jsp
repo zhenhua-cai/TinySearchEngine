@@ -41,7 +41,7 @@
             <br>
             <span class="url"><a href="<%=p.getUrl()%>"><%=p.getUrl()%></a></span>
             <div id="desc">
-                <%=p.getDescription()%>
+                <%=p.getDescription().equals("null")?"":p.getDescription()%>
             </div>
             <small class="form-text text-muted">Last Modified: &nbsp;<%=p.getLastModified()%>
             </small>

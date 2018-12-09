@@ -20,6 +20,9 @@ import java.util.List;
 public class ShowDatabaseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String table=request.getParameter("database");
+        if(table==null){
+            request.getRequestDispatcher("manager.jsp").forward(request,response);
+        }
         List<List<String>> result= searchTable(table);
         request.setAttribute("result",result);
         request.setAttribute("table",table);
@@ -68,8 +71,8 @@ public class ShowDatabaseServlet extends HttpServlet {
                         row.add(String.valueOf(resultSet.getInt(2)));
                         row.add(String.valueOf(resultSet.getInt(3)));
                         String str3=resultSet.getString(4);
-                        if(str3.length()>50)
-                            str3=str3.substring(0,50)+"...";
+                        if(str3.length()>100)
+                            str3=str3.substring(0,100)+"...";
                         row.add(str3);
 
                         break;

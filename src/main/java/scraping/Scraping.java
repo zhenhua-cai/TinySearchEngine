@@ -9,10 +9,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.sql.*;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -46,13 +44,25 @@ public class Scraping extends Thread{
      */
     private static void crawlingURL(String startingURL){
         if(!isScrapying) return;
-        int pageID,wordID;
+        if(startingURL.endsWith("/"))
+            startingURL=startingURL.substring(0,startingURL.length()-1);
+        int pageID=0,wordID;
+        boolean update=false;
+        Timestamp date;
+        Timestamp now=Timestamp.valueOf(LocalDateTime.now());
         try {
-            ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
+            ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID","last_modified");
 
             if(page.next()) {
-                page.close();
-                return;
+                pageID=page.getInt(1);
+                date = page.getTimestamp(2);
+
+                if(now.getDate()>date.getDate())
+                    update=true;
+                else {
+                    page.close();
+                    return;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,28 +89,34 @@ public class Scraping extends Thread{
         }
         if(es.size()==0) return;
         Element e=es.get(0);
+
         String body=dom.body().text();
+
         String content=e.attr("content");
         if(content.equals("")) {
             return;
         }
 
-       // java.sql.Timestamp time= Timestamp.valueOf(LocalDateTime.now());
-
-        Date date= Date.valueOf(LocalDate.now());
+        date= Timestamp.valueOf(LocalDateTime.now());
+        title=title.replace("\"","").replace("'","");
         try {
-            DBConnection.insert("page",
-                    new NameValuePair("url",startingURL),
-                    new NameValuePair("title",title),
-                    new NameValuePair("last_modified",date)
-            );
-            ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
-            if(page.next()) {
-                pageID = page.getInt(1);
+            if(!update) {
+                DBConnection.insert("page",
+                        new NameValuePair("url", startingURL),
+                        new NameValuePair("title", title),
+                        new NameValuePair("last_modified", date)
+                );
+                ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID");
+                if(page.next()) {
+                    pageID = page.getInt(1);
+                }
+                else{
+                    page.close();
+                    return;
+                }
             }
             else{
-                page.close();
-                return;
+                DBConnection.updateDB("update page set last_modified='"+date+"', title='"+title+"' where pageID='"+pageID+"';");
             }
         } catch (SQLException e1) {
             e1.printStackTrace();
@@ -126,14 +142,25 @@ public class Scraping extends Thread{
                         continue;
                     }
                 }
-                String description=AnalyzeString.getPara(body,word);
-
-                DBConnection.insert("page_word",
-                        new NameValuePair("pageID",pageID),
-                        new NameValuePair("wordID",wordID),
-                        new NameValuePair("description",description),
-                        new NameValuePair("frequency",0)
-                );
+                String description = AnalyzeString.getPara(body, word);
+                if(description!=null&&description.length()>255){
+                    description=description.substring(20,200);
+                }
+                else if(description!=null){
+                    description=description.replace("\"","").replace("'","");
+                }
+                if(!update) {
+                    DBConnection.insert("page_word",
+                            new NameValuePair("pageID", pageID),
+                            new NameValuePair("wordID", wordID),
+                            new NameValuePair("description", description),
+                            new NameValuePair("frequency", 0)
+                    );
+                }
+                else{
+                    DBConnection.updateDB("update page_word set description='"+description
+                            +"' where pageID='"+pageID+"' and wordID='"+wordID+"';");
+                }
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -148,6 +175,8 @@ public class Scraping extends Thread{
                 ResultSet r=DBConnection.search("page","url='"+url+"'","pageID");
                 if(!r.next()) {
                     r.close();
+                    if(url.endsWith("/"))
+                        url=url.substring(0,url.length()-1);
                     links.add(url);
                 }
             } catch (SQLException e1) {
