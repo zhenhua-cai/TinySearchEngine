@@ -193,7 +193,7 @@ public class DBConnection {
      * @throws SQLException
      */
     public static void updateDB(String table,String col,String value,String condition) throws SQLException {
-        String command="update "+table+" set "+col+"="+value+" where "+condition+";";
+        String command="update "+table+" set "+col+"='"+value+"' where "+condition+";";
         preparedStatement=connection.prepareStatement(command);
         preparedStatement.executeUpdate();
     }

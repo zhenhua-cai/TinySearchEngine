@@ -36,47 +36,47 @@ public class ShowDatabaseServlet extends HttpServlet {
             if(!table.equals("page_word"))
                 resultSet = DBConnection.search("select * from "+table+" limit 20;");
             else
-                resultSet = DBConnection.search("select * from "+table+" where description !='null' limit 20;");
+                resultSet = DBConnection.search("select * from "+table+" where description !='null'  order by frequency desc  limit 20;");
             while(resultSet.next()){
+                List<String> row = new LinkedList<>();
                 switch(table) {
                     case "page":
-                        List<String> row1 = new LinkedList<>();
-                        row1.add(String.valueOf(resultSet.getInt(1)));
+                        row.add(String.valueOf(resultSet.getInt(1)));
                         String str=resultSet.getString(2);
                         if(str.length()>50)
                             str=str.substring(0,50)+"...";
-                        row1.add(str);
+                        row.add(str);
                         str=resultSet.getString(3);
                         if(str.length()>50)
                             str=str.substring(0,50)+"...";
-                        row1.add(str);
+                        row.add(str);
                         str=resultSet.getString(4);
                         if(str.length()>50)
                             str=str.substring(0,50)+"...";
-                        row1.add(str);
-                        result.add(row1);
+                        row.add(str);
+
                         break;
                     case "word":
-                        List<String> row2 = new LinkedList<>();
-                        row2.add(String.valueOf(resultSet.getInt(1)));
+
+                        row.add(String.valueOf(resultSet.getInt(1)));
                         String str2=resultSet.getString(2);
                         if(str2.length()>50)
                             str2=str2.substring(0,50)+"...";
-                        row2.add(str2);
-                        result.add(row2);
+                        row.add(str2);
+
                         break;
                     case "page_word":
-                        List<String> row3 = new LinkedList<>();
-                        row3.add(String.valueOf(resultSet.getInt(1)));
-                        row3.add(String.valueOf(resultSet.getInt(2)));
-                        row3.add(String.valueOf(resultSet.getInt(3)));
+                        row.add(String.valueOf(resultSet.getInt(1)));
+                        row.add(String.valueOf(resultSet.getInt(2)));
+                        row.add(String.valueOf(resultSet.getInt(3)));
                         String str3=resultSet.getString(4);
                         if(str3.length()>50)
                             str3=str3.substring(0,50)+"...";
-                        row3.add(str3);
-                        result.add(row3);
+                        row.add(str3);
+
                         break;
                 }
+                result.add(row);
             }
         } catch (SQLException e) {
             e.printStackTrace();

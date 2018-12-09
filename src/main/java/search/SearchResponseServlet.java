@@ -20,7 +20,7 @@ import java.util.*;
         urlPatterns = "/search"
 )
 public class SearchResponseServlet extends HttpServlet {
-    
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //get the input query string.
         String queryString=request.getParameter("search");
@@ -101,14 +101,9 @@ public class SearchResponseServlet extends HttpServlet {
             }
         }
         Collections.sort(results,(p1,p2)->{
-            return p1.getFrenquence()-p2.getFrenquence();
+            return p2.getFrenquence()-p1.getFrenquence();
         });
-//        Collections.sort(results, new Comparator<Page>() {
-//            @Override
-//            public int compare(Page o1, Page o2) {
-//                return o1.getFrenquence()-o2.getFrenquence();
-//            }
-//        });
+
         return results;
     }
 }
