@@ -17,6 +17,7 @@
     float: left;
     margin-left: 7px;
 }
+button:focus {outline:0;}
 .form-control{
     float: left;
     margin-left: 5px;
