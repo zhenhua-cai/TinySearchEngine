@@ -4,12 +4,70 @@
 }
 .auto{
     display: block;
-    margin: auto;
-    width: 180px;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
+    text-align: center;
 }
 .fieldset-auto-width {
-    display: inline-block;
+    /*display: inline-block;*/
+    width: 50%;
+    margin: auto;
 }
+
+.choice-box{
+    display: inline-flex;
+    justify-content: space-around;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.rs{
+    margin-left: 25px;
+}
+input[type="radio"]{
+    display: inline-block;
+    text-align: left;
+}
+.btn{
+    margin-top: 5px;
+    margin-left: 37%;
+    margin-right: 37%;
+    width: 25%;
+    border: none;
+    border-radius: 17px;
+    background-color: #c8e6ff;
+    padding: 7px;
+}
+.btn2{
+    margin-left: 25px;
+    width: 10%;
+    border: none;
+    border-radius: 17px;
+    background-color: #c8e6ff;
+    padding: 7px;
+}
+.auto2{
+    display: block;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    text-align: center;
+}
+
+#database{
+    margin: 10px auto 0px;
+    border-collapse: collapse;
+    text-align: center;
+}
+#database th{
+    background-color: #4CAF50;
+    color: white;
+}
+#database td, #database th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+#database tr:nth-child(even){background-color: #f2f2f2;}
 #tiny{
     color:dodgerblue;
 }
@@ -18,4 +76,5 @@
 }
 #urlinput{
     display: none;
+    margin-bottom: 5px;
 }
