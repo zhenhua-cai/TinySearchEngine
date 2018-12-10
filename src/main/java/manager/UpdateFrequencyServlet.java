@@ -41,12 +41,13 @@ public class UpdateFrequencyServlet extends HttpServlet {
         doPost(request,response);
     }
     private void updateFrequency(String data,String wordID) throws SQLException {
+        if(data.endsWith("/"))
+            data=data.substring(0,data.length()-1);
         ResultSet result=DBConnection.search("select pageID from page where url='"+data+"';");
-           // System.out.println("update ");
-        int pageID=0;
-        if(result.next())
-            pageID=result.getInt(1);
-        DBConnection.updateDB("update page_word set frequency=frequency+1 " +
-                "where wordID='"+wordID+"' and pageID='"+pageID+"';");
+        if(result.next()) {
+            int pageID = result.getInt(1);
+            DBConnection.updateDB("update page_word set frequency=frequency+1 " +
+                    "where wordID='" + wordID + "' and pageID='" + pageID + "';");
+        }
     }
 }
