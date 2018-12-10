@@ -39,7 +39,7 @@
 <form action="manageDB" method="POST">
     <fieldset class="fieldset-auto-width">
         <legend>Manage Scraping:</legend>
-            <div style="padding:5px;margin:0;">Status: <span id="dbstatus" style="color:<%=dbstatus?"green":"red"%>;"><%=dbstatus?"Running":"Stopped"%></span></div>
+            <div style="padding:5px;margin:0;">Status: <span id="dbstatus" style="color:<%=dbstatus?"green":"red"%>;"><%=dbstatus==null?"":dbstatus?"Running":"Stopped"%></span></div>
             <div>
                 <%
                     String message=(String) request.getAttribute("message");
@@ -74,6 +74,7 @@
         <input type="hidden" name="page_startingindex" value="0">
         <input class="rs" type="radio" name="database" value="word">Word
         <input class="rs" type="radio" name="database" value="page_word">Page_Word
+        <input class="rs" type="radio" name="database" value="pageneedscraping">PageNeedScraping
         <button class="btn2" type="submit">Query</button>
 
         <div id="result">
@@ -85,7 +86,8 @@
                         String[][] tables={
                                 {"Page ID","Page URL","Page Title","Last Modified"},
                                 {"Word ID", "Word"},
-                                {"Page ID","Word ID","Frequency","Description"}
+                                {"Page ID","Word ID","Frequency","Description"},
+                                {"ID","Page URL"}
                         };
                         if(table.equals("page")) {
                             int index=0;
@@ -119,6 +121,17 @@
                     <%
                                 ++index;
                             }
+                        }
+                    else if(table.equals("pageneedscraping")){
+                    int index=0;
+                    while(index<tables[3].length) {
+                    %>
+                    <th>
+                        <%=tables[3][index]%>
+                    </th>
+                    <%
+                        ++index;
+                        }
                         }
                     %>
 
@@ -174,11 +187,6 @@
         urlinput.disabled='true';
         messagediv.innerText="";
     }
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://ec2-18-218-112-101.us-east-2.compute.amazonaws.com:8080/TinySearchEngine/scrapingstatus", true);
-    //xhr.open("POST", "http://localhost:8080/TinySearchEngine/scrapingstatus", true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send();
 </script>
 </body>
 </html>

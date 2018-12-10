@@ -21,6 +21,7 @@ public class ManagerServlet extends HttpServlet {
         String action=request.getParameter("action");
         String url=request.getParameter("url");
         String message="";
+        boolean dbstatus=Scraping.isRuning();
         int status=0;
         if(action.equals("start")){
             if(url.equals("")){
@@ -33,6 +34,7 @@ public class ManagerServlet extends HttpServlet {
                     Scraping.setStartingURL(url);
                     Scraping scraping=new Scraping();
                     scraping.start();
+                    dbstatus=true;
                     status=0;
                 }
                 else{
@@ -55,8 +57,8 @@ public class ManagerServlet extends HttpServlet {
         }
         request.setAttribute("message",message);
         request.setAttribute("status",status);
-        System.out.print(Scraping.isRuning());
-        request.setAttribute("dbstatus",Scraping.isRuning());
+        //System.out.print(Scraping.isRuning());
+        request.setAttribute("dbstatus",dbstatus);
         request.getRequestDispatcher("manager.jsp").forward(request,response);
 
     }

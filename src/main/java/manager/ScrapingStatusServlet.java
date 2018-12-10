@@ -15,6 +15,7 @@ import java.io.IOException;
 )
 public class ScrapingStatusServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //System.out.println("**");
         request.setAttribute("dbstatus", Scraping.isRuning());
         request.getRequestDispatcher("manager.jsp").forward(request,response);
     }

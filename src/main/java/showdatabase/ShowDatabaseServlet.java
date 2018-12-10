@@ -41,7 +41,7 @@ public class ShowDatabaseServlet extends HttpServlet {
             if(!table.equals("page_word"))
                 resultSet = DBConnection.search("select * from "+table+" limit 50;");
             else
-                resultSet = DBConnection.search("select * from "+table+" where description !='null'  order by frequency desc  limit 20;");
+                resultSet = DBConnection.search("select * from "+table+" where description !='null'  order by frequency desc  limit 50;");
             while(resultSet.next()){
                 List<String> row = new LinkedList<>();
                 switch(table) {
@@ -77,6 +77,13 @@ public class ShowDatabaseServlet extends HttpServlet {
                             str3=str3.substring(0,100)+"...";
                         row.add(str3);
 
+                        break;
+                    case "pageneedscraping":
+                        row.add(String.valueOf(resultSet.getInt(1)));
+                        String str4=resultSet.getString(2);
+                        if(str4.length()>150)
+                            str4=str4.substring(0,100)+"...";
+                        row.add(str4);
                         break;
                 }
                 result.add(row);

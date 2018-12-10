@@ -10,7 +10,10 @@
 <body>
 <main>
     <div id="setting-link">
-        <a href="manager.jsp">Manage</a>
+        <form action="scrapingstatus">
+            <button type="submit">Manage</button>
+        </form>
+
     </div>
     <div class="container">
         <div class="center">
@@ -25,5 +28,6 @@
         </div>
     </div>
 </main>
+
 </body>
 </html>

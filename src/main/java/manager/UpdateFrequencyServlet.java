@@ -42,6 +42,7 @@ public class UpdateFrequencyServlet extends HttpServlet {
     }
     private void updateFrequency(String data,String wordID) throws SQLException {
         ResultSet result=DBConnection.search("select pageID from page where url='"+data+"';");
+           // System.out.println("update ");
         int pageID=0;
         if(result.next())
             pageID=result.getInt(1);
