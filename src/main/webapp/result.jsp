@@ -70,6 +70,7 @@
         $('a').click(function()
         {
             var data=this.href;
+
             var xhr = new XMLHttpRequest();
             var wordID=this.firstElementChild.value;
             //xhr.open("POST", "http://localhost:8080/TinySearchEngine_war/updatefrequency", true);
