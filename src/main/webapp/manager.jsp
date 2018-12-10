@@ -31,10 +31,15 @@
 <div class="center">
     <h1><span id="tiny">Tiny</span><span id="search">Search</span></h1>
 </div>
+<%
+    Boolean dbstatus=(Boolean)request.getAttribute("dbstatus");
+    if(dbstatus==null) dbstatus=false;
+%>
 <div class="auto">
 <form action="manageDB" method="POST">
     <fieldset class="fieldset-auto-width">
         <legend>Manage Scraping:</legend>
+            <div style="padding:5px;margin:0;">Status: <span id="dbstatus" style="color:<%=dbstatus?"green":"red"%>;"><%=dbstatus?"Running":"Stopped"%></span></div>
             <div>
                 <%
                     String message=(String) request.getAttribute("message");
@@ -152,6 +157,7 @@
 
 
 <script>
+
     let inputdiv=document.getElementById("urlinput");
     let urlinput=document.getElementById("url");
     let messagediv=document.getElementById("message");
@@ -168,6 +174,11 @@
         urlinput.disabled='true';
         messagediv.innerText="";
     }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://ec2-18-218-112-101.us-east-2.compute.amazonaws.com:8080/TinySearchEngine/scrapingstatus", true);
+    //xhr.open("POST", "http://localhost:8080/TinySearchEngine/scrapingstatus", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send();
 </script>
 </body>
 </html>

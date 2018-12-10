@@ -54,6 +54,8 @@ public class ManagerServlet extends HttpServlet {
         }
         request.setAttribute("message",message);
         request.setAttribute("status",status);
+        System.out.print(Scraping.isRuning());
+        request.setAttribute("dbstatus",Scraping.isRuning());
         request.getRequestDispatcher("manager.jsp").forward(request,response);
 
     }

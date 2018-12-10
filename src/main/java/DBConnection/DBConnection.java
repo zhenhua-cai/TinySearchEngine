@@ -80,7 +80,7 @@ public class DBConnection {
         command.append(";");
 
         //execute mysql select command.
-//        System.out.println(command.toString());
+      //  System.out.println(command.toString());
         ResultSet result=null;
         preparedStatement = connection.prepareStatement(command.toString());
         result = preparedStatement.executeQuery();

@@ -49,6 +49,17 @@ public class Scraping extends Thread{
         boolean update=false;
         Timestamp date;
         Timestamp now=Timestamp.valueOf(LocalDateTime.now());
+        HttpResponse<String> response;
+        try {
+            response=Unirest.get(startingURL).asString();
+            if(response.getStatus()!=200) return;
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return;
+        }
+        Document dom= Jsoup.parse(response.getBody());
+        Set<String> links=getLinks(dom);
         try {
             ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID","last_modified");
 
@@ -60,6 +71,9 @@ public class Scraping extends Thread{
                     update=true;
                 else {
                     page.close();
+                    links.forEach(link->{
+                        crawlingURL(link);
+                    });
                     return;
                 }
             }
@@ -67,16 +81,7 @@ public class Scraping extends Thread{
             e.printStackTrace();
             return;
         }
-        HttpResponse<String> response;
-        try {
-            response=Unirest.get(startingURL).asString();
-            if(response.getStatus()!=200) return;
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            return;
-        }
-        Document dom= Jsoup.parse(response.getBody());
+
         Elements es=dom.head().getElementsByAttributeValue("name", "keywords");
         String title;
         try {
@@ -124,6 +129,7 @@ public class Scraping extends Thread{
             for (String word : keywords) {
                 try {
                     word = word.trim();
+                    word=word.replace("'","");
                     ResultSet result = DBConnection.search("word", "word='" + word + "'", "wordID");
                     if (result.next()) {
                         wordID = result.getInt(1);
@@ -138,7 +144,9 @@ public class Scraping extends Thread{
                             continue;
                         }
                     }
-                    String description = AnalyzeString.getPara(body, word);
+                   // String description = AnalyzeString.getPara(body, word);
+                    String description=getDescription(dom,word);
+
                     if (description != null && description.length() > 255) {
                         description = description.substring(20, 200);
                     } else if (description != null) {
@@ -160,6 +168,64 @@ public class Scraping extends Thread{
                 }
             }
         }
+
+        links.forEach(link->{
+            crawlingURL(link);
+        });
+    }
+    private static int findClosestFromLeft(String text, int index){
+        int dot=text.lastIndexOf(". ",index);
+        int exa=text.lastIndexOf("! ",index);
+        int que=text.lastIndexOf("? ",index);
+        int semic=text.lastIndexOf("; ",index);
+        return Math.max(Math.max(dot,exa),Math.max(que,semic));
+    }
+    private static int findClosestFromRight(String text, int index){
+        int dot=text.indexOf(". ",index);
+        int exa=text.indexOf("! ",index);
+        int que=text.indexOf("? ",index);
+        int semic=text.indexOf("; ",index);
+        return Math.min(Math.min(dot,exa),Math.min(que,semic));
+    }
+    private static String getDescription(Document dom,String word){
+        Elements textNode=dom.getElementsContainingText(word);
+        String result=null;
+        textNode.sort(new Comparator<Element>() {
+            @Override
+            public int compare(Element o1, Element o2) {
+                return  o2.text().length()-o1.text().length();
+            }
+        });
+        boolean ok=true;
+        for (Element node : textNode) {
+            StringBuilder text=new StringBuilder(node.text());
+            if(text.length()>=150){
+                int index=text.indexOf(word);
+                int begin=findClosestFromLeft(text.toString(),index);
+                int end=findClosestFromRight(text.toString(),index);
+                if(begin==-1||end==-1){
+                    return text.substring(0,255);
+                }
+                String str=text.substring(begin,end);
+                if(str.length()>255) return str.substring(0,255);
+                return text.substring(begin,end);
+            }
+            if(text.length()<150&&text.length()>60) return text.toString();
+            if(text.length()<50&&ok) {
+                result =text.toString();
+                ok=false;
+            }
+        }    
+        
+        return result;
+    }
+
+    /**
+     * get links of the page
+     * @param dom dom element
+     * @return links
+     */
+    private static Set<String> getLinks(Document dom){
         Elements anchors=dom.body().getElementsByTag("a");
         Set<String> links=new HashSet<>();
         for(Element anchor:anchors) {
@@ -178,9 +244,7 @@ public class Scraping extends Thread{
                 e1.printStackTrace();
             }
         }
-        links.forEach(link->{
-            crawlingURL(link);
-        });
+        return links;
     }
     public void run(){
         startScraping();

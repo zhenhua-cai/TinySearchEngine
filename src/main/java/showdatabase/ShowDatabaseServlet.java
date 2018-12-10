@@ -1,6 +1,7 @@
 package showdatabase;
 
 import DBConnection.DBConnection;
+import scraping.Scraping;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +27,7 @@ public class ShowDatabaseServlet extends HttpServlet {
         List<List<String>> result= searchTable(table);
         request.setAttribute("result",result);
         request.setAttribute("table",table);
+        request.setAttribute("dbstatus", Scraping.isRuning());
         request.getRequestDispatcher("manager.jsp").forward(request,response);
     }
 

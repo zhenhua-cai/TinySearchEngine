@@ -9,7 +9,6 @@ public class AnalyzeString {
      */
     public static String getPara(String str,String keyword){
 
-
     	String hold = "";
         
        hold = test1(str, keyword);
