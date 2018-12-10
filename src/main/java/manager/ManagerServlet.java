@@ -44,6 +44,7 @@ public class ManagerServlet extends HttpServlet {
         else {
             if(!Scraping.isRuning()){
                 message="Scraping hasn't been started!";
+
                 status=1;
             }
             else {

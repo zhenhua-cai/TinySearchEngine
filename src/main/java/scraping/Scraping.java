@@ -32,7 +32,10 @@ public class Scraping extends Thread{
     }
     public static void startScraping() {
         isScrapying=true;
-        crawlingURL(startingURL);
+        try {
+            crawlingURL(startingURL);
+        }
+        catch(Exception ex){}
         isScrapying=false;
     }
     public static boolean isRuning(){return isScrapying;}
@@ -49,17 +52,7 @@ public class Scraping extends Thread{
         boolean update=false;
         Timestamp date;
         Timestamp now=Timestamp.valueOf(LocalDateTime.now());
-        HttpResponse<String> response;
-        try {
-            response=Unirest.get(startingURL).asString();
-            if(response.getStatus()!=200) return;
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-            return;
-        }
-        Document dom= Jsoup.parse(response.getBody());
-        Set<String> links=getLinks(dom);
+
         try {
             ResultSet page=DBConnection.search("page","url='"+startingURL+"'","pageID","last_modified");
 
@@ -71,9 +64,6 @@ public class Scraping extends Thread{
                     update=true;
                 else {
                     page.close();
-                    links.forEach(link->{
-                        crawlingURL(link);
-                    });
                     return;
                 }
             }
@@ -81,6 +71,16 @@ public class Scraping extends Thread{
             e.printStackTrace();
             return;
         }
+        HttpResponse<String> response;
+        try {
+            response=Unirest.get(startingURL).asString();
+            if(response.getStatus()!=200) return;
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            return;
+        }
+        Document dom= Jsoup.parse(response.getBody());
 
         Elements es=dom.head().getElementsByAttributeValue("name", "keywords");
         String title;
@@ -93,8 +93,6 @@ public class Scraping extends Thread{
         }
         if(es.size()!=0) {
             Element e = es.get(0);
-
-            String body = dom.body().text();
 
             String content = e.attr("content");
             if (content.equals("")) {
@@ -167,11 +165,11 @@ public class Scraping extends Thread{
                     e1.printStackTrace();
                 }
             }
+            Set<String> links=getLinks(dom);
+            links.forEach(link->{
+                crawlingURL(link);
+            });
         }
-
-        links.forEach(link->{
-            crawlingURL(link);
-        });
     }
     private static int findClosestFromLeft(String text, int index){
         int dot=text.lastIndexOf(". ",index);
