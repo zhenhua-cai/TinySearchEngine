@@ -15,7 +15,7 @@
 <body>
 <div id="setting-link">
     <form action="scrapingstatus">
-        <button type="submit">Manage</button>
+        <button class="rbutton" type="submit">Manage</button>
     </form>
 </div>
 <div class="searchPart">

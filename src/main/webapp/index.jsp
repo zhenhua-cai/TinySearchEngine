@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main>
-    <div id="setting-link">
-        <form action="scrapingstatus">
-            <button type="submit">Manage</button>
-        </form>
+<div id="setting-link">
+    <form action="scrapingstatus">
+        <button class="rbutton" type="submit">Manage</button>
+    </form>
 
-    </div>
+</div>
+<main>
     <div class="container">
         <div class="center">
             <div class="center">
