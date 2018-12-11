@@ -38,10 +38,13 @@ public class ShowDatabaseServlet extends HttpServlet {
         List<List<String>> result=new LinkedList<>();
         try {
             ResultSet  resultSet;
-            if(!table.equals("page_word"))
-                resultSet = DBConnection.search("select * from "+table+" limit 50;");
+            if(table.equals("page_word"))
+                resultSet = DBConnection.search("select * from "+table+" order by frequency desc limit 50;");
+            else if(table.equals("pageneedscraping"))
+                resultSet = DBConnection.search("select * from "+table+" order by id asc limit 50;");
             else
-                resultSet = DBConnection.search("select * from "+table+" where description !='null'  order by frequency desc  limit 50;");
+                resultSet = DBConnection.search("select * from "+table+" limit 50;");
+
             while(resultSet.next()){
                 List<String> row = new LinkedList<>();
                 switch(table) {
