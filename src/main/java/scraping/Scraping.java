@@ -5,26 +5,20 @@ import DBConnection.NameValuePair;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sun.tools.example.debug.tty.TTY;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import sun.security.tools.jarsigner.TimestampedSigner;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class Scraping extends Thread{
     private static String startingURL="https://www.cbsnews.com";
