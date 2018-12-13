@@ -21,9 +21,10 @@ import java.util.*;
 )
 public class SearchResponseServlet extends HttpServlet {
 
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //get the input query string.
-        String queryString=request.getParameter("search");
+        String queryString=request.getParameter("search").toLowerCase();
 
         try {
             List<Page> results=searchDB(queryString,0);
@@ -67,6 +68,9 @@ public class SearchResponseServlet extends HttpServlet {
         List<Page> results=new LinkedList<>();
         Set<Integer> ids=new HashSet<>();
         for(String keyword:keywords) {
+            long begin=System.currentTimeMillis();
+            keyword=keyword.replaceAll("['\"]","").trim();
+            if(keyword.length()==0) continue;;
             //search each keyword.
             //ResultSet wordIDs = DBConnection.search("word", "word like '%" + keyword+"%'", "wordID");
             ResultSet wordIDs = DBConnection.search( "select wordID from word where word like '%"+keyword+"%' limit "+startingIndex+", 10");
@@ -94,11 +98,13 @@ public class SearchResponseServlet extends HttpServlet {
                                 description,
                                 wordID
                         );
-                        p.setFrenquence(frequency);
                         results.add(p);
                     }
                 }
             }
+            wordIDs.close();
+            UpdateSearchHistory updateSearchHistory=new UpdateSearchHistory(keyword,System.currentTimeMillis()-begin);
+            updateSearchHistory.start();
         }
         Collections.sort(results,(p1,p2)->{
             if(p2.getDescription().equals("null")&&p1.getDescription().equals("null")) {
@@ -114,7 +120,6 @@ public class SearchResponseServlet extends HttpServlet {
                 return p2.getFrenquence()-p1.getFrenquence();
             }
         });
-
         return results;
     }
 }

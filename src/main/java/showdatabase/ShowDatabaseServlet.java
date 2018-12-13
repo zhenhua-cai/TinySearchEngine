@@ -40,6 +40,8 @@ public class ShowDatabaseServlet extends HttpServlet {
             ResultSet  resultSet;
             if(table.equals("page_word"))
                 resultSet = DBConnection.search("select * from "+table+" order by frequency desc limit 50;");
+            else if(table.equals("user_history"))
+                resultSet = DBConnection.search("select * from "+table+" order by frequency desc ,responsetime asc limit 50;");
             else if(table.equals("pageneedscraping"))
                 resultSet = DBConnection.search("select * from "+table+" order by id asc limit 50;");
             else
@@ -58,10 +60,8 @@ public class ShowDatabaseServlet extends HttpServlet {
                         if(str.length()>50)
                             str=str.substring(0,50)+"...";
                         row.add(str);
-                        str=resultSet.getString(4);
-                        if(str.length()>50)
-                            str=str.substring(0,50)+"...";
-                        row.add(str);
+                        row.add(resultSet.getTimestamp(4).toString());
+                        row.add(resultSet.getTimestamp(5).toString());
                         break;
                     case "word":
 
@@ -87,6 +87,11 @@ public class ShowDatabaseServlet extends HttpServlet {
                         if(str4.length()>150)
                             str4=str4.substring(0,100)+"...";
                         row.add(str4);
+                        break;
+                    case "user_history":
+                        row.add(String.valueOf(resultSet.getString(1)));
+                        row.add(String.valueOf(resultSet.getLong(2)));
+                        row.add(String.valueOf(resultSet.getLong(3)));
                         break;
                 }
                 result.add(row);

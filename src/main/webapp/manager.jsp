@@ -75,6 +75,7 @@
         <input class="rs" type="radio" name="database" value="word">Word
         <input class="rs" type="radio" name="database" value="page_word">Page_Word
         <input class="rs" type="radio" name="database" value="pageneedscraping">PageNeedScraping
+        <input class="rs" type="radio" name="database" value="user_history">Search_History
         <button class="btn2" type="submit">Query</button>
 
         <div id="result">
@@ -84,10 +85,11 @@
                         String table = (String) request.getAttribute("table");
                         if(table==null) table="";
                         String[][] tables={
-                                {"Page ID","Page URL","Page Title","Last Modified"},
+                                {"Page ID","Page URL","Page Title","Starting Time","EndingTime"},
                                 {"Word ID", "Word"},
                                 {"Page ID","Word ID","Frequency","Description"},
-                                {"ID","Page URL"}
+                                {"ID","Page URL"},
+                                {"word","searchtimes","Response Time(ms)"}
                         };
                         if(table.equals("page")) {
                             int index=0;
@@ -132,6 +134,17 @@
                     <%
                         ++index;
                         }
+                        }
+                        else if(table.equals("user_history")){
+                            int index=0;
+                            while(index<tables[4].length) {
+                    %>
+                    <th>
+                        <%=tables[4][index]%>
+                    </th>
+                    <%
+                                ++index;
+                            }
                         }
                     %>
 

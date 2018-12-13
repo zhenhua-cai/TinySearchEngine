@@ -8,10 +8,6 @@ public class Page {
     private String title;
     private Date lastModified;
 
-    public void setFrenquence(int frenquence) {
-        this.frenquence = frenquence;
-    }
-
     public int getFrenquence() {
         return frenquence;
     }
