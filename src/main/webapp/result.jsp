@@ -14,23 +14,26 @@
 </head>
 <body>
 <div id="setting-link">
-    <form action="scrapingstatus">
-        <button class="rbutton" type="submit">Manage</button>
-    </form>
-</div>
-<div class="searchPart">
-    <div class="searchName">
-        <p><span id="tiny">Tiny</span><span id="search">Search</span></p>
-    </div>
-    <div class="searchBar">
-        <form action="search">
-            <input type="text" id="keywords" class="form-control" name="search" value="<%=keywords%>">
-            <button style="background-color: Transparent; background-repeat:no-repeat; border: none;
+    <div class="searchPart">
+        <div class="searchName">
+            <p><span id="tiny">Tiny</span><span id="search">Search</span></p>
+        </div>
+        <div class="searchBar">
+            <form action="search">
+                <input type="text" id="keywords" class="form-control" name="search" value="<%=keywords%>">
+                <button style="background-color: Transparent; background-repeat:no-repeat; border: none;
             cursor:pointer;" type="submit" id="keywords" name="search"><i class="fas fa-search"></i></button>
-            <%--<button type="submit" class="btn">Search</button>--%>
+                <%--<button type="submit" class="btn">Search</button>--%>
+            </form>
+        </div>
+        <form action="scrapingstatus">
+            <button style="background-color: Transparent; background-repeat:no-repeat; border: none;
+            cursor:pointer;" type="submit"><i class="fas fa-cog"></i></button>
         </form>
     </div>
+
 </div>
+
 <div class="result">
     <br/>
     <ul style="list-style-type:none">
