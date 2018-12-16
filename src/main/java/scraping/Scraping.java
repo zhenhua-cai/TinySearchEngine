@@ -288,7 +288,7 @@ public class Scraping extends Thread{
         if(title.length()==0) return;
         Elements keywordElements=document.getElementsByAttributeValue("name","keyword");
         List<String> keywords=new LinkedList<>();
-        keywords.addAll(Arrays.asList(title.split("\\s*\\p{Punct}?\\s*")));
+        keywords.addAll(Arrays.asList(title.split("\\s*\\p{Punct}\\s*")));
         if(keywordElements.size()!=0){
             Element meta=keywordElements.get(0);
             String content=meta.attr("content");
@@ -431,7 +431,7 @@ public class Scraping extends Thread{
                 int begin=findClosestFromLeft(text.toString(),index);
                 int end=findClosestFromRight(text.toString(),index);
                 if(begin==-1||end==-1){
-                    return text.substring(0,255);
+                    return text.substring(0,150);
                 }
                 String str=text.substring(begin,end);
                 if(str.length()>255) return str.substring(0,255);
