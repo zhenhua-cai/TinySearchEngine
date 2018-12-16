@@ -173,7 +173,7 @@
             <%
                 if(result.size()!=0){
             %>
-            <span class="form-text text-muted" style="padding-top: 20px">Only show first 50 rows</span>
+            <span class="form-text text-muted" style="padding-top: 20px">Only show first at most 50 rows</span>
             <%
                 }
             %>
